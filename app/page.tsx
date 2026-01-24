@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -70,18 +71,22 @@ export default function Home() {
 
                 {/* CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <button
+                  <motion.button
                     onClick={() => setShowSignUp(true)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.97 }}
                     className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-hover to-primary hover:from-primary hover:to-primary-light rounded-2xl font-semibold text-lg text-primary-foreground transition shadow-lg shadow-primary/20 active:scale-[0.98]"
                   >
                     Get Started Free
-                  </button>
-                  <Link
+                  </motion.button>
+                  <motion.a
                     href="/markets"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.97}}
                     className="w-full sm:w-auto px-8 py-4 bg-card hover:bg-card-hover border border-card-border rounded-2xl font-semibold text-lg transition text-center active:scale-[0.98]"
                   >
                     Browse Markets
-                  </Link>
+                  </motion.a>
                 </div>
 
                 {/* Trust Indicators */}
