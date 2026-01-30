@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
 import ThemeToggle from "@/components/ThemeToggle";
+import MobileNavigation from "@/components/MobileNavigation";
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -34,12 +35,13 @@ export default function Home() {
       {showOnboarding && <OnboardingCarousel onClose={handleCloseOnboarding} />}
 
       {/* Hero Section - Mobile First */}
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col pb-24 lg:pb-0">
         {/* Header with New Navigation */}
         <Navigation 
           currentPage="home" 
           onSignIn={() => setShowSignIn(true)}
           onSignUp={() => setShowSignUp(true)}
+          showPortfolioBalance={true}
         />
 
         {/* Main Hero */}
@@ -426,6 +428,9 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Mobile Navigation */}
+      <MobileNavigation currentPage="home" />
 
       <style jsx>{`
         @keyframes slide-up {
