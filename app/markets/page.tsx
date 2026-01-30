@@ -79,7 +79,16 @@ const predictionMarkets = [
   },
 ];
 
-const categories = ["All", "Economy", "Sports", "Tech", "Events", "Environment", "Infrastructure"];
+const categories = [
+  "All",
+  "Economy",
+  "Sports",
+  "Tech",
+  "Events",
+  "Environment",
+  "Infrastructure",
+  "Weather"
+];
 
 export default function MarketsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
