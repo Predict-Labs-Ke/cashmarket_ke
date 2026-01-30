@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
@@ -20,12 +21,18 @@ export default function ProfileDropdown({
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Load saved language preference on mount
   useEffect(() => {
-    setMounted(true);
-    const savedLanguage = localStorage.getItem("language") || "en";
-    setSelectedLanguage(savedLanguage);
+    // Delay state updates to avoid cascading renders
+    const initialize = () => {
+      setMounted(true);
+      const savedLanguage = localStorage.getItem("language") || "en";
+      setSelectedLanguage(savedLanguage);
+    };
+    
+    initialize();
   }, []);
 
   // Close dropdown when clicking outside
@@ -57,8 +64,8 @@ export default function ProfileDropdown({
     }
     // Clear any user session data
     localStorage.removeItem("userSession");
-    // Redirect to home/login page
-    window.location.href = "/";
+    // Redirect to home/login page using Next.js router
+    router.push("/");
   };
 
   const languages = [

@@ -101,7 +101,7 @@ export default function DocsPage() {
               </h2>
               <div className="prose prose-invert max-w-none">
                 <p className="text-muted-foreground mb-4">
-                  CashMarket KE is Kenya's premier prediction market platform where you can forecast real-world events 
+                  CashMarket KE is Kenya&apos;s premier prediction market platform where you can forecast real-world events 
                   and compete with other forecasters. Our platform focuses on Kenyan markets, politics, sports, and economy.
                 </p>
                 <p className="text-muted-foreground">
@@ -120,7 +120,7 @@ export default function DocsPage() {
                   <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold flex-shrink-0">1</div>
                   <div>
                     <h3 className="font-semibold mb-1">Sign Up</h3>
-                    <p className="text-muted-foreground text-sm">Click the "Sign Up" button and provide your email, username, and password.</p>
+                    <p className="text-muted-foreground text-sm">Click the &quot;Sign Up&quot; button and provide your email, username, and password.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -172,13 +172,13 @@ export default function DocsPage() {
                 <div className="bg-success/5 border border-success/20 rounded-xl p-4">
                   <div className="font-semibold text-success mb-2">✓ Good Forecast</div>
                   <p className="text-sm text-muted-foreground">
-                    Predicting 80% "Yes" on an event that happens = High score
+                    Predicting 80% &quot;Yes&quot; on an event that happens = High score
                   </p>
                 </div>
                 <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-4">
                   <div className="font-semibold text-destructive mb-2">✗ Poor Forecast</div>
                   <p className="text-sm text-muted-foreground">
-                    Predicting 90% "Yes" on an event that doesn't happen = Low score
+                    Predicting 90% &quot;Yes&quot; on an event that doesn&apos;t happen = Low score
                   </p>
                 </div>
               </div>
@@ -194,7 +194,7 @@ export default function DocsPage() {
                   <span className="text-xl">📊</span>
                   <div>
                     <h3 className="font-semibold mb-1">Use Multiple Sources</h3>
-                    <p className="text-sm text-muted-foreground">Don't rely on a single news source. Cross-reference information.</p>
+                    <p className="text-sm text-muted-foreground">Don&apos;t rely on a single news source. Cross-reference information.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">

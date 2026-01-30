@@ -26,7 +26,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold mb-4">1. Introduction</h2>
             <p className="text-muted-foreground">
-              Welcome to CashMarket KE ("we," "our," or "us"). These Terms and Conditions ("Terms") govern your 
+              Welcome to CashMarket KE (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). These Terms and Conditions (&quot;Terms&quot;) govern your 
               access to and use of our prediction market platform. By accessing or using CashMarket KE, you agree 
               to be bound by these Terms.
             </p>
@@ -112,7 +112,7 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold mb-4">7. Privacy & Data Protection</h2>
             <p className="text-muted-foreground">
               Your use of CashMarket KE is subject to our Privacy Policy, which describes how we collect, use, 
-              and protect your personal information. We comply with Kenya's Data Protection Act and other 
+              and protect your personal information. We comply with Kenya&apos;s Data Protection Act and other 
               applicable regulations.
             </p>
           </section>
@@ -122,7 +122,7 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold mb-4">8. Limitation of Liability</h2>
             <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-6">
               <p className="text-sm text-muted-foreground">
-                CashMarket KE is provided "as is" without warranties of any kind. We are not liable for any 
+                CashMarket KE is provided &quot;as is&quot; without warranties of any kind. We are not liable for any 
                 indirect, incidental, or consequential damages arising from your use of the platform. Our total 
                 liability shall not exceed the amount you paid us in the 12 months preceding the claim.
               </p>
