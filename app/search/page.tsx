@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-// Sample prediction markets data
+// Sample prediction markets data - same as markets page
 const predictionMarkets = [
   {
     id: 1,
@@ -126,17 +126,16 @@ const categories = [
   "Weather"
 ];
 
-export default function MarketsPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredMarkets = predictionMarkets.filter((market) => {
     const matchesCategory = selectedCategory === "All" || market.category === selectedCategory;
-    const matchesSearch = market.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = market.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         market.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
-  const trendingMarkets = predictionMarkets.filter((m) => m.trending);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -152,27 +151,6 @@ export default function MarketsPage() {
                 Cash<span className="text-primary">Market</span>
               </span>
             </Link>
-            
-            {/* Desktop Search */}
-            <div className="hidden md:block flex-1 max-w-md mx-8">
-              <div className="relative">
-                <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search markets..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-                />
-              </div>
-            </div>
 
             <div className="flex items-center gap-3">
               <Link
@@ -204,32 +182,60 @@ export default function MarketsPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </header>
 
-          {/* Mobile Search Bar */}
-          <div className="mt-3 md:hidden">
-            <div className="relative">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 lg:px-8 py-6 pb-24 lg:pb-8">
+        {/* Page Title */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <h1 className="text-3xl font-bold">Search Markets</h1>
+          </div>
+          <p className="text-muted-foreground">
+            Find the markets you&apos;re looking for
+          </p>
+        </div>
+
+        {/* Search Bar */}
+        <div className="mb-6">
+          <div className="relative">
+            <svg
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search by market name or category..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-input border border-input-border rounded-2xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-2 focus:ring-ring transition text-lg"
+              autoFocus
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground hover:text-foreground transition"
+                aria-label="Clear search"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search markets..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-              />
-            </div>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Category Pills - Horizontal Scroll */}
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 pb-3 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2">
+        {/* Category Pills */}
+        <div className="mb-6 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 pb-2">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -237,7 +243,7 @@ export default function MarketsPage() {
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
                   selectedCategory === cat
                     ? "bg-primary text-primary-foreground"
-                    : "bg-card text-muted-foreground hover:bg-card-hover"
+                    : "bg-card text-muted-foreground hover:bg-card-hover border border-card-border"
                 }`}
               >
                 {cat}
@@ -245,46 +251,23 @@ export default function MarketsPage() {
             ))}
           </div>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 lg:px-8 py-4 pb-24 lg:pb-8">
-        {/* Trending Section */}
-        {selectedCategory === "All" && searchQuery === "" && (
-          <section className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <svg className="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
-              </svg>
-              <h2 className="font-semibold text-lg">Trending Now</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
-              {trendingMarkets.map((market) => (
-                <div
-                  key={market.id}
-                  className="bg-gradient-to-br from-warning/10 to-card border border-warning/20 rounded-2xl p-4 hover:border-warning/40 transition cursor-pointer"
-                >
-                  <span className="text-xs text-warning font-medium">{market.category}</span>
-                  <h3 className="text-sm font-medium mt-1 line-clamp-2">{market.title}</h3>
-                  <div className="flex items-center justify-between mt-3">
-                    <span className="text-primary font-semibold">{market.yesPercentage}% Yes</span>
-                    <span className="text-xs text-muted-foreground">{market.volume}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Results Summary */}
+        <div className="mb-4">
+          <p className="text-sm text-muted-foreground">
+            {searchQuery ? (
+              <>
+                Found <span className="font-semibold text-foreground">{filteredMarkets.length}</span> {filteredMarkets.length === 1 ? 'market' : 'markets'} 
+                {selectedCategory !== "All" && <> in <span className="font-semibold text-foreground">{selectedCategory}</span></>}
+              </>
+            ) : (
+              <>Showing <span className="font-semibold text-foreground">{filteredMarkets.length}</span> {filteredMarkets.length === 1 ? 'market' : 'markets'}</>
+            )}
+          </p>
+        </div>
 
-        {/* Markets List */}
-        <section>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-lg">
-              {selectedCategory === "All" ? "All Markets" : selectedCategory}
-            </h2>
-            <span className="text-sm text-muted-foreground">{filteredMarkets.length} markets</span>
-          </div>
-
+        {/* Markets Grid */}
+        {filteredMarkets.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
             {filteredMarkets.map((market) => (
               <div
@@ -337,38 +320,46 @@ export default function MarketsPage() {
               </div>
             ))}
           </div>
-
-          {filteredMarkets.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">No markets found</p>
-              <button
-                onClick={() => {
-                  setSelectedCategory("All");
-                  setSearchQuery("");
-                }}
-                className="mt-2 text-primary text-sm hover:text-primary-light transition"
-              >
-                Clear filters
-              </button>
-            </div>
-          )}
-        </section>
+        ) : (
+          <div className="text-center py-16">
+            <svg className="w-16 h-16 mx-auto mb-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <h3 className="text-lg font-medium mb-2">No markets found</h3>
+            <p className="text-muted-foreground mb-4">
+              {searchQuery ? (
+                <>We couldn&apos;t find any markets matching &quot;{searchQuery}&quot;</>
+              ) : (
+                <>Try adjusting your filters</>
+              )}
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedCategory("All");
+              }}
+              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary-hover transition"
+            >
+              Clear all filters
+            </button>
+          </div>
+        )}
       </main>
 
       {/* Bottom Navigation - Mobile Only */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border px-6 py-3 safe-area-pb">
         <div className="flex items-center justify-around max-w-md mx-auto">
-          <Link href="/markets" className="flex flex-col items-center gap-1 text-primary">
+          <Link href="/markets" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
-            <span className="text-xs font-medium">Markets</span>
+            <span className="text-xs">Markets</span>
           </Link>
-          <Link href="/search" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition">
+          <Link href="/search" className="flex flex-col items-center gap-1 text-primary">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <span className="text-xs">Search</span>
+            <span className="text-xs font-medium">Search</span>
           </Link>
           <Link href="/breaking" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
