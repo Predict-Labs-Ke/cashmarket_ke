@@ -1,56 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Navigation from "@/components/Navigation";
+import OnboardingCarousel from "@/components/OnboardingCarousel";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
+  // Show onboarding carousel on first visit (client-side only)
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+    if (!hasSeenOnboarding) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleCloseOnboarding = () => {
+    setShowOnboarding(false);
+    localStorage.setItem("hasSeenOnboarding", "true");
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* Onboarding Carousel */}
+      {showOnboarding && <OnboardingCarousel onClose={handleCloseOnboarding} />}
+
       {/* Hero Section - Mobile First */}
       <div className="min-h-screen flex flex-col">
-        {/* Header */}
-        <header className="px-4 lg:px-8 py-4 flex items-center justify-between max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-hover rounded-xl flex items-center justify-center font-bold text-xl text-primary-foreground">
-              C
-            </div>
-            <div>
-              <span className="text-xl font-bold">
-                Cash<span className="text-primary">Market</span>
-              </span>
-              <span className="text-kenya-red text-xs ml-1 font-medium">KE</span>
-            </div>
-          </div>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/about"
-                className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                About
-              </Link>
-              <button
-                onClick={() => setShowSignIn(true)}
-                className="px-4 py-2 text-sm font-medium text-primary hover:text-primary-light transition"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setShowSignUp(true)}
-                className="hidden sm:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
-              >
-                Get Started
-              </button>
-            </div>
-        </header>
+        {/* Header with New Navigation */}
+        <Navigation 
+          currentPage="home" 
+          onSignIn={() => setShowSignIn(true)}
+          onSignUp={() => setShowSignUp(true)}
+        />
 
         {/* Main Hero */}
         <main className="flex-1 flex flex-col justify-center px-6 lg:px-8 pb-8">
@@ -232,11 +222,22 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="px-4 lg:px-8 py-6 border-t border-border">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-muted-foreground text-xs lg:text-sm">
-              © 2026 CashMarket KE. Trade responsibly.
-            </p>
-            <div className="flex gap-6 text-xs lg:text-sm text-muted-foreground">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+              <p className="text-muted-foreground text-xs lg:text-sm">
+                © 2026 CashMarket KE. Trade responsibly.
+              </p>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setShowOnboarding(true)}
+                  className="text-xs lg:text-sm text-primary hover:text-primary-light transition"
+                >
+                  View Tutorial
+                </button>
+                <ThemeToggle />
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-4 sm:gap-6 text-xs lg:text-sm text-muted-foreground justify-center sm:justify-start">
               <a href="#" className="hover:text-foreground transition">Terms</a>
               <a href="#" className="hover:text-foreground transition">Privacy</a>
               <a href="#" className="hover:text-foreground transition">Support</a>
