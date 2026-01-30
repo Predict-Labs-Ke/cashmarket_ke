@@ -145,8 +145,8 @@ export default function BreakingPage() {
         {/* Page Title */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
-            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             <h1 className="text-3xl font-bold">Breaking</h1>
           </div>
@@ -213,7 +213,7 @@ export default function BreakingPage() {
                         <div className="flex items-center justify-center gap-1">
                           {isPositive ? (
                             <>
-                              <svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
                               </svg>
                               <span className="text-lg font-semibold text-success">
@@ -222,7 +222,7 @@ export default function BreakingPage() {
                             </>
                           ) : (
                             <>
-                              <svg className="w-5 h-5 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-5 h-5 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                               </svg>
                               <span className="text-lg font-semibold text-destructive">
@@ -278,7 +278,7 @@ export default function BreakingPage() {
                     <div className="flex items-center justify-center gap-1">
                       {isPositive ? (
                         <>
-                          <svg className="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
                           </svg>
                           <span className="text-lg font-semibold text-success">
@@ -287,7 +287,7 @@ export default function BreakingPage() {
                         </>
                       ) : (
                         <>
-                          <svg className="w-4 h-4 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                           </svg>
                           <span className="text-lg font-semibold text-destructive">
