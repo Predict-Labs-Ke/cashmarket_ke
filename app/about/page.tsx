@@ -143,7 +143,7 @@ export default function AboutPage() {
                     </div>
                     <div>
                       <h4 className="font-medium mb-1">Trade Your Prediction</h4>
-                      <p className="text-sm text-muted-foreground">Buy "Yes" if you think it will happen, "No" if you don&apos;t</p>
+                      <p className="text-sm text-muted-foreground">Buy &quot;Yes&quot; if you think it will happen, &quot;No&quot; if you don&apos;t</p>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -160,7 +160,7 @@ export default function AboutPage() {
 
               <p className="text-muted-foreground leading-relaxed">
                 The prices (shown as percentages) reflect the crowd&apos;s collective belief about the likelihood of an event. 
-                A market at 65% "Yes" suggests most traders believe there&apos;s a 65% chance the event will happen.
+                A market at 65% &quot;Yes&quot; suggests most traders believe there&apos;s a 65% chance the event will happen.
               </p>
             </div>
           </div>
