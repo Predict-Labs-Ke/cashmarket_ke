@@ -25,7 +25,7 @@ export default function Navigation({
   cashDeposit = 500,
   isLoggedIn = false,
   userName = "User",
-  userAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=User",
+  userAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E",
   onLogout
 }: NavigationProps) {
   return (
