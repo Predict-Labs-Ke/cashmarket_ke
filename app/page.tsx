@@ -14,12 +14,12 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  // Show onboarding carousel on first visit
+  // Show onboarding carousel on first visit (client-side only)
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
     if (!hasSeenOnboarding) {
-      // Use setTimeout to avoid setting state in effect
-      setTimeout(() => setShowOnboarding(true), 0);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowOnboarding(true);
     }
   }, []);
 

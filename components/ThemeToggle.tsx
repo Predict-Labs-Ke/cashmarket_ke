@@ -4,18 +4,18 @@ import { useState, useEffect } from "react";
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
+  // Only run on client side after mount to avoid hydration issues
   useEffect(() => {
-    // Check for saved theme preference or default to dark
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const shouldBeDark = savedTheme === "dark" || (!savedTheme && prefersDark);
     
-    // Use setTimeout to avoid setting state in effect
-    setTimeout(() => {
-      setIsDark(shouldBeDark);
-      document.documentElement.classList.toggle("dark", shouldBeDark);
-    }, 0);
+    setIsDark(shouldBeDark);
+    document.documentElement.classList.toggle("dark", shouldBeDark);
   }, []);
 
   const toggleTheme = () => {
@@ -24,6 +24,17 @@ export default function ThemeToggle() {
     document.documentElement.classList.toggle("dark", newIsDark);
     localStorage.setItem("theme", newIsDark ? "dark" : "light");
   };
+
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <button className="p-2 rounded-lg hover:bg-muted transition" aria-label="Theme toggle">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+    );
+  }
 
   return (
     <button

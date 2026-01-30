@@ -49,7 +49,17 @@ export default function OnboardingCarousel({ onClose }: OnboardingCarouselProps)
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div 
+      className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="onboarding-title"
+      onKeyDown={(e) => {
+        if (e.key === "Escape") {
+          skip();
+        }
+      }}
+    >
       <div className="w-full max-w-2xl">
         {/* Carousel Card */}
         <div className="bg-card border border-card-border rounded-3xl p-8 md:p-12 relative">
@@ -57,6 +67,7 @@ export default function OnboardingCarousel({ onClose }: OnboardingCarouselProps)
           <button
             onClick={skip}
             className="absolute top-4 right-4 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition"
+            aria-label="Skip onboarding tutorial"
           >
             Skip
           </button>
@@ -64,10 +75,10 @@ export default function OnboardingCarousel({ onClose }: OnboardingCarouselProps)
           {/* Slide Content */}
           <div className="text-center">
             <div className={`inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br ${slides[currentSlide].color} mb-6`}>
-              <span className="text-5xl">{slides[currentSlide].icon}</span>
+              <span className="text-5xl" aria-hidden="true">{slides[currentSlide].icon}</span>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 id="onboarding-title" className="text-3xl md:text-4xl font-bold mb-4">
               {slides[currentSlide].title}
             </h2>
 
@@ -77,17 +88,19 @@ export default function OnboardingCarousel({ onClose }: OnboardingCarouselProps)
           </div>
 
           {/* Progress Indicators */}
-          <div className="flex items-center justify-center gap-2 mb-8">
+          <div className="flex items-center justify-center gap-2 mb-8" role="tablist" aria-label="Onboarding progress">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
+                role="tab"
+                aria-selected={index === currentSlide}
+                aria-label={`Go to slide ${index + 1}`}
                 className={`h-2 rounded-full transition-all ${
                   index === currentSlide
                     ? "w-8 bg-primary"
                     : "w-2 bg-muted hover:bg-muted-foreground"
                 }`}
-                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
@@ -102,12 +115,14 @@ export default function OnboardingCarousel({ onClose }: OnboardingCarouselProps)
                   ? "text-muted-foreground cursor-not-allowed opacity-50"
                   : "text-foreground hover:bg-muted"
               }`}
+              aria-label="Go to previous slide"
             >
               Back
             </button>
             <button
               onClick={nextSlide}
               className="px-8 py-3 bg-primary hover:bg-primary-hover text-primary-foreground rounded-xl font-semibold transition"
+              aria-label={currentSlide === slides.length - 1 ? "Get started" : "Go to next slide"}
             >
               {currentSlide === slides.length - 1 ? "Get Started" : "Next"}
             </button>
