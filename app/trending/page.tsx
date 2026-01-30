@@ -91,7 +91,7 @@ export default function TrendingPage() {
       </main>
 
       {/* Mobile Navigation */}
-      <MobileNavigation currentPage="home" />
+      <MobileNavigation currentPage="portfolio" />
     </div>
   );
 }

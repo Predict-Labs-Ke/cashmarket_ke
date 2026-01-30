@@ -36,7 +36,7 @@ export default function PortfolioPage() {
                   <h2 className="text-lg font-semibold text-foreground">Portfolio Balance</h2>
                 </div>
                 <p className="text-4xl font-bold text-primary mb-2">
-                  KES {portfolioBalance.toLocaleString()}
+                  KES {portfolioBalance.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Total value of your positions and available cash
@@ -56,7 +56,7 @@ export default function PortfolioPage() {
                   <h2 className="text-lg font-semibold text-foreground">Cash Deposit</h2>
                 </div>
                 <p className="text-4xl font-bold text-foreground mb-2">
-                  KES {cashDeposit.toLocaleString()}
+                  KES {cashDeposit.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Available funds for trading

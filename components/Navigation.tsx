@@ -98,13 +98,13 @@ export default function Navigation({
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Portfolio:</span>
                     <span className="text-sm font-semibold text-primary">
-                      KES {portfolioBalance.toLocaleString()}
+                      KES {portfolioBalance.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Cash:</span>
                     <span className="text-sm font-semibold text-foreground">
-                      KES {cashDeposit.toLocaleString()}
+                      KES {cashDeposit.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
