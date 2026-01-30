@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 
 interface NavigationProps {
   currentPage?: "home" | "markets" | "breaking" | "trending" | "leaderboard" | "about";

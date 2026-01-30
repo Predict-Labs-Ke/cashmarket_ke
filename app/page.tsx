@@ -18,7 +18,8 @@ export default function Home() {
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
     if (!hasSeenOnboarding) {
-      setShowOnboarding(true);
+      // Use setTimeout to avoid setting state in effect
+      setTimeout(() => setShowOnboarding(true), 0);
     }
   }, []);
 

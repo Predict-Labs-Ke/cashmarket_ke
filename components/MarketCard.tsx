@@ -47,7 +47,6 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
 };
 
 export default function MarketCard({
-  id,
   title,
   category,
   yesPercentage,
