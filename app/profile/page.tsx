@@ -129,7 +129,13 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-24 lg:pb-8">
-      <Navigation currentPage="profile" showPortfolioBalance={true} />
+      <Navigation 
+        currentPage="profile" 
+        showPortfolioBalance={true}
+        isLoggedIn={true}
+        userName={mockUserData.name}
+        userAvatar={mockUserData.avatar}
+      />
 
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-8">
         {/* Hero/Identity Section */}

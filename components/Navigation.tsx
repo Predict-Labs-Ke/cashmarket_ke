@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ProfileDropdown from "./ProfileDropdown";
 
 interface NavigationProps {
   currentPage?: "home" | "markets" | "breaking" | "trending" | "leaderboard" | "about" | "profile";
@@ -9,6 +10,10 @@ interface NavigationProps {
   showPortfolioBalance?: boolean;
   portfolioBalance?: number;
   cashDeposit?: number;
+  isLoggedIn?: boolean;
+  userName?: string;
+  userAvatar?: string;
+  onLogout?: () => void;
 }
 
 export default function Navigation({ 
@@ -17,7 +22,11 @@ export default function Navigation({
   onSignUp,
   showPortfolioBalance = false,
   portfolioBalance = 1000,
-  cashDeposit = 500
+  cashDeposit = 500,
+  isLoggedIn = false,
+  userName = "User",
+  userAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=User",
+  onLogout
 }: NavigationProps) {
   return (
     <>
@@ -110,21 +119,29 @@ export default function Navigation({
                 </div>
               )}
               
-              {onSignIn && onSignUp && (
-                <>
-                  <button
-                    onClick={onSignIn}
-                    className="px-4 py-2 text-sm font-medium text-primary hover:text-primary-light transition"
-                  >
-                    Login
-                  </button>
-                  <button
-                    onClick={onSignUp}
-                    className="hidden sm:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
-                  >
-                    Sign Up
-                  </button>
-                </>
+              {isLoggedIn ? (
+                <ProfileDropdown 
+                  userName={userName}
+                  userAvatar={userAvatar}
+                  onLogout={onLogout}
+                />
+              ) : (
+                onSignIn && onSignUp && (
+                  <>
+                    <button
+                      onClick={onSignIn}
+                      className="px-4 py-2 text-sm font-medium text-primary hover:text-primary-light transition"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={onSignUp}
+                      className="hidden sm:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                )
               )}
             </div>
           </div>
