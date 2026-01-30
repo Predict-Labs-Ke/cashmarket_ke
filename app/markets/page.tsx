@@ -77,6 +77,42 @@ const predictionMarkets = [
     endDate: "Nov 30, 2026",
     trending: true,
   },
+  {
+    id: 9,
+    title: "Will Nairobi receive above-average rainfall in March 2026?",
+    category: "Weather",
+    yesPercentage: 58,
+    volume: "KES 420K",
+    endDate: "Mar 31, 2026",
+    trending: false,
+  },
+  {
+    id: 10,
+    title: "Will temperatures in Mombasa exceed 35°C in February 2026?",
+    category: "Weather",
+    yesPercentage: 71,
+    volume: "KES 310K",
+    endDate: "Feb 28, 2026",
+    trending: false,
+  },
+  {
+    id: 11,
+    title: "Will Kenya experience El Niño conditions in 2026?",
+    category: "Weather",
+    yesPercentage: 44,
+    volume: "KES 580K",
+    endDate: "Dec 31, 2026",
+    trending: true,
+  },
+  {
+    id: 12,
+    title: "Will Mount Kenya receive snowfall in July 2026?",
+    category: "Weather",
+    yesPercentage: 82,
+    volume: "KES 275K",
+    endDate: "Jul 31, 2026",
+    trending: false,
+  },
 ];
 
 const categories = [
