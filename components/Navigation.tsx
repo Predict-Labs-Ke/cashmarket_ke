@@ -95,14 +95,14 @@ export default function Navigation({
               {/* Portfolio Balance - Desktop Only */}
               {showPortfolioBalance && (
                 <div className="hidden lg:flex items-center gap-6 mr-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">Portfolio:</span>
+                  <div className="flex flex-col items-start">
+                    <span className="text-xs text-muted-foreground">Portfolio</span>
                     <span className="text-sm font-semibold text-primary">
                       KES {portfolioBalance.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">Cash:</span>
+                  <div className="flex flex-col items-start">
+                    <span className="text-xs text-muted-foreground">Cash</span>
                     <span className="text-sm font-semibold text-foreground">
                       KES {cashDeposit.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
