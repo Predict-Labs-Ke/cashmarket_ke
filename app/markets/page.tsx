@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Navigation from "@/components/Navigation";
+import MarketCard from "@/components/MarketCard";
 
-// Sample prediction markets data
+// Sample prediction markets data with enhanced fields
 const predictionMarkets = [
   {
     id: 1,
@@ -13,6 +15,8 @@ const predictionMarkets = [
     volume: "KES 2.4M",
     endDate: "Apr 30, 2026",
     trending: true,
+    resolutionSource: "Central Bank of Kenya",
+    movement24h: -2,
   },
   {
     id: 2,
@@ -22,6 +26,8 @@ const predictionMarkets = [
     volume: "KES 890K",
     endDate: "Dec 31, 2026",
     trending: true,
+    resolutionSource: "Official event organizers",
+    movement24h: 5,
   },
   {
     id: 3,
@@ -31,6 +37,8 @@ const predictionMarkets = [
     volume: "KES 1.8M",
     endDate: "Dec 31, 2026",
     trending: false,
+    resolutionSource: "Safaricom Annual Report",
+    movement24h: 3,
   },
   {
     id: 4,
@@ -40,6 +48,8 @@ const predictionMarkets = [
     volume: "KES 5.2M",
     endDate: "Nov 15, 2026",
     trending: true,
+    resolutionSource: "CAF Official Results",
+    movement24h: -1,
   },
   {
     id: 5,
@@ -49,6 +59,8 @@ const predictionMarkets = [
     volume: "KES 620K",
     endDate: "Dec 31, 2026",
     trending: false,
+    resolutionSource: "Ministry of Energy",
+    movement24h: 0,
   },
   {
     id: 6,
@@ -58,6 +70,8 @@ const predictionMarkets = [
     volume: "KES 3.1M",
     endDate: "Dec 31, 2027",
     trending: false,
+    resolutionSource: "Kenya Railways",
+    movement24h: 2,
   },
   {
     id: 7,
@@ -67,6 +81,8 @@ const predictionMarkets = [
     volume: "KES 1.2M",
     endDate: "Dec 31, 2026",
     trending: false,
+    resolutionSource: "Kenya National Bureau of Statistics",
+    movement24h: 1,
   },
   {
     id: 8,
@@ -76,6 +92,8 @@ const predictionMarkets = [
     volume: "KES 4.8M",
     endDate: "Nov 30, 2026",
     trending: true,
+    resolutionSource: "Football Kenya Federation",
+    movement24h: 4,
   },
   {
     id: 9,
@@ -85,6 +103,8 @@ const predictionMarkets = [
     volume: "KES 420K",
     endDate: "Mar 31, 2026",
     trending: false,
+    resolutionSource: "Kenya Meteorological Department",
+    movement24h: -3,
   },
   {
     id: 10,
@@ -94,6 +114,8 @@ const predictionMarkets = [
     volume: "KES 310K",
     endDate: "Feb 28, 2026",
     trending: false,
+    resolutionSource: "Kenya Meteorological Department",
+    movement24h: 0,
   },
   {
     id: 11,
@@ -103,6 +125,8 @@ const predictionMarkets = [
     volume: "KES 580K",
     endDate: "Dec 31, 2026",
     trending: true,
+    resolutionSource: "Kenya Meteorological Department",
+    movement24h: -5,
   },
   {
     id: 12,
@@ -112,6 +136,8 @@ const predictionMarkets = [
     volume: "KES 275K",
     endDate: "Jul 31, 2026",
     trending: false,
+    resolutionSource: "Kenya Wildlife Service",
+    movement24h: 0,
   },
 ];
 
@@ -140,74 +166,15 @@ export default function MarketsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
+      {/* Header with Navigation */}
+      <Navigation currentPage="markets" />
+
+      {/* Search and Filter Section */}
+      <div className="sticky top-[57px] z-40 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-hover rounded-lg flex items-center justify-center font-bold text-sm text-primary-foreground">
-                C
-              </div>
-              <span className="font-bold text-lg">
-                Cash<span className="text-primary">Market</span>
-              </span>
-            </Link>
-            
-            {/* Desktop Search */}
-            <div className="hidden md:block flex-1 max-w-md mx-8">
-              <div className="relative">
-                <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search markets..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Link
-                href="/about"
-                className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                About
-              </Link>
-              <Link
-                href="/"
-                className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Home
-              </Link>
-              <Link
-                href="/"
-                className="md:hidden p-2 text-muted-foreground hover:text-foreground transition"
-                aria-label="Close and return to home"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-
-          {/* Mobile Search Bar */}
-          <div className="mt-3 md:hidden">
-            <div className="relative">
+          {/* Search Bar */}
+          <div className="mb-3">
+            <div className="relative max-w-md">
               <svg
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
                 fill="none"
@@ -221,31 +188,31 @@ export default function MarketsPage() {
                 placeholder="Search markets..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                className="w-full pl-10 pr-4 py-2.5 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
               />
             </div>
           </div>
-        </div>
 
-        {/* Category Pills - Horizontal Scroll */}
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 pb-3 overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
-                  selectedCategory === cat
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card text-muted-foreground hover:bg-card-hover"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Category Pills */}
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+                    selectedCategory === cat
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card text-muted-foreground hover:bg-card-hover border border-card-border"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-4 pb-24 lg:pb-8">
@@ -287,54 +254,10 @@ export default function MarketsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
             {filteredMarkets.map((market) => (
-              <div
+              <MarketCard
                 key={market.id}
-                className="bg-card border border-card-border rounded-2xl p-4 lg:p-5 active:scale-[0.98] transition cursor-pointer hover:bg-card-hover hover:border-border-secondary"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="px-2 py-0.5 bg-muted rounded-full text-xs text-muted-foreground">
-                        {market.category}
-                      </span>
-                      {market.trending && (
-                        <span className="text-warning text-xs">🔥</span>
-                      )}
-                    </div>
-                    <h3 className="font-medium text-[15px] leading-snug">{market.title}</h3>
-                  </div>
-                </div>
-
-                {/* Probability Bar */}
-                <div className="mt-4">
-                  <div className="flex justify-between text-sm mb-1.5">
-                    <span className="text-primary font-medium">Yes {market.yesPercentage}%</span>
-                    <span className="text-destructive font-medium">No {100 - market.yesPercentage}%</span>
-                  </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-primary-hover to-primary rounded-full"
-                      style={{ width: `${market.yesPercentage}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Meta */}
-                <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
-                  <span>Vol: {market.volume}</span>
-                  <span>Ends {market.endDate}</span>
-                </div>
-
-                {/* Trade Buttons */}
-                <div className="grid grid-cols-2 gap-2 mt-4">
-                  <button className="py-2.5 bg-primary-muted hover:bg-primary/20 active:bg-primary/30 border border-primary/50 text-primary rounded-xl font-medium transition">
-                    Buy Yes
-                  </button>
-                  <button className="py-2.5 bg-destructive-muted hover:bg-destructive/20 active:bg-destructive/30 border border-destructive/50 text-destructive rounded-xl font-medium transition">
-                    Buy No
-                  </button>
-                </div>
-              </div>
+                {...market}
+              />
             ))}
           </div>
 
