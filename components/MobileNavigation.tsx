@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 interface MobileNavigationProps {
-  currentPage?: "home" | "search" | "breaking" | "portfolio";
+  currentPage?: "home" | "search" | "breaking" | "portfolio" | "profile";
 }
 
 export default function MobileNavigation({ currentPage = "home" }: MobileNavigationProps) {
@@ -56,6 +56,18 @@ export default function MobileNavigation({ currentPage = "home" }: MobileNavigat
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
           <span className={`text-xs ${currentPage === "portfolio" ? "font-medium" : ""}`}>Portfolio</span>
+        </Link>
+        
+        <Link 
+          href="/profile" 
+          className={`flex flex-col items-center gap-1 transition ${
+            currentPage === "profile" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span className={`text-xs ${currentPage === "profile" ? "font-medium" : ""}`}>Profile</span>
         </Link>
       </div>
     </nav>
