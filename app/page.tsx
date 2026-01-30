@@ -82,6 +82,12 @@ export default function Home() {
                   >
                     Browse Markets
                   </Link>
+                  <Link
+                    href="/leaderboard"
+                    className="w-full sm:w-auto px-8 py-4 bg-card hover:bg-card-hover border border-card-border rounded-2xl font-semibold text-lg transition text-center active:scale-[0.98]"
+                  >
+                    Leaderboards
+                  </Link>
                 </div>
 
                 {/* Trust Indicators */}
