@@ -27,20 +27,29 @@ export default function Home() {
               <span className="text-kenya-red text-xs ml-1 font-medium">KE</span>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowSignIn(true)}
-              className="px-4 py-2 text-sm font-medium text-primary hover:text-primary-light transition"
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setShowSignUp(true)}
-              className="hidden sm:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
-            >
-              Get Started
-            </button>
-          </div>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/about"
+                className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                About
+              </Link>
+              <button
+                onClick={() => setShowSignIn(true)}
+                className="px-4 py-2 text-sm font-medium text-primary hover:text-primary-light transition"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => setShowSignUp(true)}
+                className="hidden sm:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
+              >
+                Get Started
+              </button>
+            </div>
         </header>
 
         {/* Main Hero */}
