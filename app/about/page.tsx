@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
+import MobileNavigation from "@/components/MobileNavigation";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground pb-24 lg:pb-8">
       {/* Header */}
-      <Navigation currentPage="about" />
+      <Navigation currentPage="about" showPortfolioBalance={true} />
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 lg:px-8 py-12 lg:py-16">
@@ -477,6 +478,9 @@ export default function AboutPage() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Navigation */}
+      <MobileNavigation currentPage="home" />
     </div>
   );
 }

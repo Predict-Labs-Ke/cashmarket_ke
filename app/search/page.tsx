@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Navigation from "@/components/Navigation";
+import MobileNavigation from "@/components/MobileNavigation";
 
 // Sample prediction markets data - same as markets page
 const predictionMarkets = [
@@ -138,52 +140,9 @@ export default function SearchPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground pb-24 lg:pb-8">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-hover rounded-lg flex items-center justify-center font-bold text-sm text-primary-foreground">
-                C
-              </div>
-              <span className="font-bold text-lg">
-                Cash<span className="text-primary">Market</span>
-              </span>
-            </Link>
-
-            <div className="flex items-center gap-3">
-              <Link
-                href="/about"
-                className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                About
-              </Link>
-              <Link
-                href="/"
-                className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-muted-foreground transition"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Home
-              </Link>
-              <Link
-                href="/"
-                className="md:hidden p-2 text-muted-foreground hover:text-foreground transition"
-                aria-label="Close and return to home"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation showPortfolioBalance={true} />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-6 pb-24 lg:pb-8">
@@ -347,35 +306,8 @@ export default function SearchPage() {
         )}
       </main>
 
-      {/* Bottom Navigation - Mobile Only */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border px-6 py-3 safe-area-pb">
-        <div className="flex items-center justify-around max-w-md mx-auto">
-          <Link href="/markets" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-            <span className="text-xs">Markets</span>
-          </Link>
-          <Link href="/search" className="flex flex-col items-center gap-1 text-primary">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span className="text-xs font-medium">Search</span>
-          </Link>
-          <Link href="/breaking" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <span className="text-xs">Breaking</span>
-          </Link>
-          <Link href="/" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            <span className="text-xs">Profile</span>
-          </Link>
-        </div>
-      </nav>
+      {/* Mobile Navigation */}
+      <MobileNavigation currentPage="search" />
     </div>
   );
 }
