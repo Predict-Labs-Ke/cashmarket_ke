@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 interface NavigationProps {
-  currentPage?: "home" | "markets" | "breaking" | "trending" | "leaderboard" | "about";
+  currentPage?: "home" | "markets" | "breaking" | "trending" | "leaderboard" | "about" | "profile";
   onSignIn?: () => void;
   onSignUp?: () => void;
   showPortfolioBalance?: boolean;
