@@ -15,13 +15,13 @@ export default function PortfolioBalance({
         <div className="flex items-center gap-8">
           <div className="flex flex-col items-start">
             <span className="text-xs text-muted-foreground">Portfolio Balance</span>
-            <span className="text-lg font-semibold text-primary">
+            <span className="text-sm font-semibold text-primary">
               KES {portfolioBalance.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
           <div className="flex flex-col items-start">
             <span className="text-xs text-muted-foreground">Cash Deposit</span>
-            <span className="text-lg font-semibold text-foreground">
+            <span className="text-sm font-semibold text-foreground">
               KES {cashDeposit.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
