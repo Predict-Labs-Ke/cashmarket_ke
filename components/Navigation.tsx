@@ -119,30 +119,15 @@ export default function Navigation({
                 </div>
               )}
               
-              {isLoggedIn ? (
-                <ProfileDropdown 
-                  userName={userName}
-                  userAvatar={userAvatar}
-                  onLogout={onLogout}
-                />
-              ) : (
-                onSignIn && onSignUp && (
-                  <>
-                    <button
-                      onClick={onSignIn}
-                      className="px-4 py-2 text-sm font-medium text-primary hover:text-primary-light transition"
-                    >
-                      Login
-                    </button>
-                    <button
-                      onClick={onSignUp}
-                      className="hidden sm:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
-                    >
-                      Sign Up
-                    </button>
-                  </>
-                )
-              )}
+              {/* Profile Dropdown - Always shown */}
+              <ProfileDropdown 
+                isLoggedIn={isLoggedIn}
+                userName={userName}
+                userAvatar={userAvatar}
+                onLogout={onLogout}
+                onSignIn={onSignIn}
+                onSignUp={onSignUp}
+              />
             </div>
           </div>
         </div>
