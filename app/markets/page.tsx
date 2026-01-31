@@ -854,7 +854,7 @@ export default function MarketsPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-4 pb-24 lg:pb-8">
         {/* Trending Section */}
-        {selectedCategory === "All" && searchQuery === "" && (
+        {selectedCategory === "All" && searchQuery === "" && !hasActiveFilters && (
           <section className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <svg className="w-5 h-5 text-warning" fill="currentColor" viewBox="0 0 20 20">
