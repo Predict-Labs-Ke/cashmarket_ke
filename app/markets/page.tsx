@@ -182,7 +182,9 @@ export default function MarketsPage() {
     const matchesCategory = selectedCategory === "All" || market.category === selectedCategory;
     const matchesSearch = market.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategoryFilter = selectedCategories.length === 0 || selectedCategories.includes(market.category);
-    const matchesStatus = status === "Active"; // All current markets are active
+    // Since we don't have a resolved field in the data, treat all markets as active for now
+    // In production, this would check market.resolved or market.status
+    const matchesStatus = true; // All current sample markets are active
     return matchesCategory && matchesSearch && matchesCategoryFilter && matchesStatus;
   });
 

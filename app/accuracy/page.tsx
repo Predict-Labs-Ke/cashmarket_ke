@@ -282,7 +282,7 @@ export default function AccuracyPage() {
       </main>
 
       {/* Mobile Navigation */}
-      <MobileNavigation currentPage="home" />
+      <MobileNavigation currentPage="accuracy" />
     </div>
   );
 }

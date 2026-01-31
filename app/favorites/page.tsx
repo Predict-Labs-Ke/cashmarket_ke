@@ -243,7 +243,7 @@ export default function FavoritesPage() {
       </main>
 
       {/* Mobile Navigation */}
-      <MobileNavigation currentPage="home" />
+      <MobileNavigation currentPage="favorites" />
     </div>
   );
 }
