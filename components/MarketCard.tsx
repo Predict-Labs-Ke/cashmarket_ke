@@ -303,6 +303,7 @@ export default function MarketCard({
         direction={buyDirection}
         marketTitle={title}
         currentPercentage={yesPercentage}
+        marketId={id}
       />
     </div>
   );

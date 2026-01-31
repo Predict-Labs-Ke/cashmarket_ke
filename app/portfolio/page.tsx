@@ -1,26 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserBalance } from "@/lib/hooks/useUserBalance";
 import Navigation from "@/components/Navigation";
 import MobileNavigation from "@/components/MobileNavigation";
 
 export default function PortfolioPage() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, status } = useAuth();
   const router = useRouter();
-  const [portfolioBalance] = useState(1000);
-  const [cashDeposit] = useState(500);
+  const { data, loading, error } = useUserBalance();
 
   // Redirect to home if not logged in
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (status !== 'loading' && !isLoggedIn) {
       router.push("/");
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, status, router]);
 
-  // Don't render anything if not logged in
-  if (!isLoggedIn) {
+  // Don't render anything if not logged in or loading auth
+  if (status === 'loading' || !isLoggedIn) {
     return null;
   }
 
@@ -39,65 +39,141 @@ export default function PortfolioPage() {
           </p>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <p className="mt-4 text-muted-foreground">Loading portfolio...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-4 mb-6">
+            <p className="text-destructive font-medium">Error loading portfolio</p>
+            <p className="text-sm text-destructive/80 mt-1">{error}</p>
+          </div>
+        )}
+
         {/* Portfolio Cards */}
-        <div className="space-y-4">
-          {/* Portfolio Balance Card */}
-          <div className="bg-card border border-card-border rounded-2xl p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <h2 className="text-lg font-semibold text-foreground">Portfolio Balance</h2>
+        {data && !loading && (
+          <div className="space-y-4">
+            {/* Portfolio Balance Card */}
+            <div className="bg-card border border-card-border rounded-2xl p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h2 className="text-lg font-semibold text-foreground">Total Value</h2>
+                  </div>
+                  <p className="text-4xl font-bold text-primary mb-2">
+                    KES {data.total_value.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Total value of your positions and available cash
+                  </p>
                 </div>
-                <p className="text-4xl font-bold text-primary mb-2">
-                  KES {portfolioBalance.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Total value of your positions and available cash
-                </p>
               </div>
             </div>
-          </div>
 
-          {/* Cash Deposit Card */}
-          <div className="bg-card border border-card-border rounded-2xl p-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                  </svg>
-                  <h2 className="text-lg font-semibold text-foreground">Cash Deposit</h2>
+            {/* Cash Deposit Card */}
+            <div className="bg-card border border-card-border rounded-2xl p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <h2 className="text-lg font-semibold text-foreground">Available Balance</h2>
+                  </div>
+                  <p className="text-4xl font-bold text-foreground mb-2">
+                    KES {data.balance.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Available funds for trading
+                  </p>
                 </div>
-                <p className="text-4xl font-bold text-foreground mb-2">
-                  KES {cashDeposit.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Available funds for trading
-                </p>
               </div>
             </div>
-          </div>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-2 gap-4 mt-6">
-            <button className="bg-primary text-primary-foreground rounded-2xl p-4 font-semibold hover:bg-primary-hover transition active:scale-[0.98]">
-              <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Deposit
-            </button>
-            <button className="bg-card border border-card-border text-foreground rounded-2xl p-4 font-semibold hover:bg-card-hover transition active:scale-[0.98]">
-              <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-              </svg>
-              Withdraw
-            </button>
-          </div>
+            {/* Portfolio Value Card */}
+            <div className="bg-card border border-card-border rounded-2xl p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <h2 className="text-lg font-semibold text-foreground">Portfolio Value</h2>
+                  </div>
+                  <p className="text-4xl font-bold text-foreground mb-2">
+                    KES {data.portfolio_value.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Current value of your market positions
+                  </p>
+                </div>
+              </div>
+            </div>
 
-          {/* Recent Activity Section */}
+            {/* Quick Actions */}
+            <div className="grid grid-cols-2 gap-4 mt-6">
+              <button className="bg-primary text-primary-foreground rounded-2xl p-4 font-semibold hover:bg-primary-hover transition active:scale-[0.98]">
+                <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Deposit
+              </button>
+              <button className="bg-card border border-card-border text-foreground rounded-2xl p-4 font-semibold hover:bg-card-hover transition active:scale-[0.98]">
+                <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                </svg>
+                Withdraw
+              </button>
+            </div>
+
+            {/* Positions */}
+            {data.positions.length > 0 && (
+              <div className="mt-6">
+                <h2 className="text-xl font-bold mb-4">Your Positions</h2>
+                <div className="space-y-3">
+                  {data.positions.map((position) => (
+                    <div key={position.market_id} className="bg-card border border-card-border rounded-xl p-4">
+                      <p className="font-medium mb-2">{position.market_question}</p>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-muted-foreground">YES Shares</p>
+                          <p className="font-semibold">{position.yes_shares.toFixed(2)}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">NO Shares</p>
+                          <p className="font-semibold">{position.no_shares.toFixed(2)}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">Invested</p>
+                          <p className="font-semibold">KES {position.total_invested.toFixed(2)}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">Current Value</p>
+                          <p className="font-semibold">KES {position.current_value.toFixed(2)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      {/* Mobile Navigation */}
+      <MobileNavigation currentPage="portfolio" />
+    </div>
+  );
+}
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
             <div className="bg-card border border-card-border rounded-2xl p-6 text-center">
