@@ -231,7 +231,8 @@ export async function getUserBalance(): Promise<{
 /**
  * Send OTP code
  */
-export async function sendOTP(purpose: 'deposit' | 'withdrawal' | 'login'): Promise<{
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function sendOTP(_purpose: 'deposit' | 'withdrawal' | 'login'): Promise<{
   success: boolean;
   message: string;
   _test_code?: string;
