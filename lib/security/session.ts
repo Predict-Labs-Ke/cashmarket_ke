@@ -85,7 +85,7 @@ function checkSuspiciousActivity(
   const newUserAgent = userAgent && !userAgents.includes(userAgent);
 
   // Mark as suspicious if both IP and user agent are new
-  return newIp && newUserAgent;
+  return Boolean(newIp && newUserAgent);
 }
 
 /**

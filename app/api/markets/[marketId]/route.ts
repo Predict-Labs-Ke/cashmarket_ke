@@ -10,10 +10,11 @@ import type { Market, UserPosition, MarketDetail } from "@/lib/types";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { marketId: string } }
+  { params }: { params: Promise<{ marketId: string }> }
 ) {
   try {
-    const marketId = parseInt(params.marketId);
+    const { marketId: marketIdStr } = await params;
+    const marketId = parseInt(marketIdStr);
 
     if (isNaN(marketId)) {
       return NextResponse.json(

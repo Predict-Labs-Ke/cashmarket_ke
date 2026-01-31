@@ -9,7 +9,7 @@ import type { Market, UserPosition, ResolveMarketRequest } from "@/lib/types";
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { marketId: string } }
+  { params }: { params: Promise<{ marketId: string }> }
 ) {
   try {
     // Check authentication - only admins and oracles can resolve markets
@@ -19,7 +19,8 @@ export async function POST(
     }
 
     const adminId = parseInt(session.user.id);
-    const marketId = parseInt(params.marketId);
+    const { marketId: marketIdStr } = await params;
+    const marketId = parseInt(marketIdStr);
 
     if (isNaN(marketId)) {
       return NextResponse.json(
