@@ -4,10 +4,41 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Navigation from "@/components/Navigation";
 import MobileNavigation from "@/components/MobileNavigation";
-import { getMarket, calculateStake, executeTrade } from "@/lib/api/client";
-import type { MarketDetail } from "@/lib/api/client";
+import { getMarket, calculateStake, executeTrade, type MarketDetail } from "@/lib/api/client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from "@/contexts/AuthContext";
+
+// Type definitions for the component
+interface MarketStats {
+  participant_count: number;
+  trade_count: number;
+  total_volume: number;
+  total_yes_shares?: number;
+  total_no_shares?: number;
+}
+
+interface Trade {
+  id: number;
+  user_id: number;
+  market_id: number;
+  outcome: 'YES' | 'NO';
+  shares: number;
+  cost: number;
+  price_at_trade: number;
+  created_at: string;
+  user_name?: string;
+}
+
+interface TradePreview {
+  cost: number;
+  shares: number;
+  new_price_yes: number;
+  new_price_no: number;
+  potential_payout: number;
+  expected_return: number;
+  roi_percentage: number;
+  fee: number;
+}
 
 export default function MarketDetailsPage() {
   const params = useParams();
@@ -16,15 +47,15 @@ export default function MarketDetailsPage() {
   const marketId = parseInt(params.id as string);
 
   const [market, setMarket] = useState<MarketDetail | null>(null);
-  const [stats, setStats] = useState<any>(null);
-  const [recentTrades, setRecentTrades] = useState<any[]>([]);
+  const [stats, setStats] = useState<MarketStats | null>(null);
+  const [recentTrades, setRecentTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Trading state
   const [selectedOutcome, setSelectedOutcome] = useState<'YES' | 'NO'>('YES');
   const [stakeAmount, setStakeAmount] = useState<string>('');
-  const [tradePreview, setTradePreview] = useState<any>(null);
+  const [tradePreview, setTradePreview] = useState<TradePreview | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [executing, setExecuting] = useState(false);
 
@@ -63,6 +94,8 @@ export default function MarketDetailsPage() {
   }, [marketId]);
 
   // Generate simulated price history
+  // NOTE: This generates mock historical data for demonstration.
+  // In production, this should be replaced with actual historical price data from the database.
   const generatePriceHistory = (currentPrice: number) => {
     const history = [];
     const points = 20;
@@ -586,7 +619,7 @@ function getTimeRemaining(endDateStr: string): string {
 }
 
 // Helper function to anonymize usernames
-function anonymizeUsername(username: string): string {
+function anonymizeUsername(username: string | undefined): string {
   if (!username) return 'Anonymous';
   if (username.length <= 3) return username[0] + '***';
   return username.substring(0, 2) + '***' + username.substring(username.length - 1);
