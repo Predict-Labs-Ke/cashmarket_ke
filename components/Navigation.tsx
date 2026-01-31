@@ -114,6 +114,24 @@ export default function Navigation({
                 </div>
               )}
               
+              {/* Login/Sign Up buttons - Show when NOT logged in (Desktop only) */}
+              {!isLoggedIn && (
+                <div className="hidden md:flex items-center gap-2">
+                  <button
+                    onClick={onSignIn}
+                    className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition rounded-lg hover:bg-muted"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={onSignUp}
+                    className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+              
               {/* Profile Dropdown - Always shown */}
               <ProfileDropdown 
                 onSignIn={onSignIn}

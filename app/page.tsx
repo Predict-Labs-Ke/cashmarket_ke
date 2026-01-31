@@ -17,13 +17,13 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  // Show onboarding carousel on first visit only when NOT logged in (client-side only)
+  // Show onboarding carousel every time page loads when NOT logged in (client-side only)
   useEffect(() => {
     // Wait for auth state to finish loading before showing onboarding
     if (status === "loading") return;
     
-    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
-    if (!hasSeenOnboarding && !isLoggedIn) {
+    // Show onboarding on every page refresh for non-logged-in users
+    if (!isLoggedIn) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowOnboarding(true);
     }
@@ -31,7 +31,6 @@ export default function Home() {
 
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
-    localStorage.setItem("hasSeenOnboarding", "true");
   };
 
   const handleSignIn = async (e: React.FormEvent) => {

@@ -275,8 +275,8 @@ export default function ProfileDropdown({
             </>
           ) : (
             <>
-              {/* Profile Section - Logged Out */}
-              <div className="p-4">
+              {/* Profile Section - Logged Out - Mobile Only */}
+              <div className="p-4 md:hidden">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-12 h-12 rounded-full bg-muted border-2 border-border flex items-center justify-center">
                     <svg className="w-6 h-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
