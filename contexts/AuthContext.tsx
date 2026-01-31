@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return {
         isLoggedIn: false,
         user: null,
-        status: "loading" as const,
+        status: "unauthenticated" as const,
       };
     }
     
