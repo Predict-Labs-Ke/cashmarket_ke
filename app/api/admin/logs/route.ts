@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       WHERE 1=1
     `;
 
-    const params: any[] = [];
+    const params: (string | number)[] = [];
 
     if (actionType) {
       query += ' AND l.action_type = ?';
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 
     // Get total count
     let countQuery = 'SELECT COUNT(*) as total FROM audit_logs WHERE 1=1';
-    const countParams: any[] = [];
+    const countParams: (string | number)[] = [];
 
     if (actionType) {
       countQuery += ' AND action_type = ?';

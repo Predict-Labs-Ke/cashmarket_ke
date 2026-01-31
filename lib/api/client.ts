@@ -102,8 +102,20 @@ export async function getMarket(marketId: number): Promise<{
     trade_count: number;
     total_volume: number;
   };
-  recent_trades: any[];
-  user_position?: any;
+  recent_trades: {
+    id: number;
+    user_id: number;
+    outcome: string;
+    shares: number;
+    cost: number;
+    price_at_trade: number;
+    created_at: string;
+  }[];
+  user_position?: {
+    yes_shares: number;
+    no_shares: number;
+    total_invested: number;
+  };
 }> {
   return apiFetch(`/api/markets/${marketId}`);
 }
@@ -168,7 +180,13 @@ export async function getUserBalance(): Promise<{
     total_invested: number;
     total_shares: number;
   };
-  recent_transactions: any[];
+  recent_transactions: {
+    id: number;
+    type: string;
+    amount: number;
+    status: string;
+    created_at: string;
+  }[];
 }> {
   return apiFetch('/api/user/balance');
 }

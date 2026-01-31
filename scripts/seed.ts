@@ -14,8 +14,6 @@ import { hashPassword } from '../lib/security/passwordHash';
 import { DEFAULT_B, initializeMarketQuantities } from '../lib/lmsr';
 import { 
   SIMULATION_MARKETS, 
-  SIMULATION_USERS, 
-  SIMULATION_ADMINS,
   getSimulationNotice 
 } from '../lib/data/simulation';
 
@@ -36,7 +34,7 @@ async function seed() {
     try {
       adminStmt.run('admin@cashmarket.ke', 'Admin User', adminPasswordHash, 'admin', 1);
       console.log('✓ Admin user created: admin@cashmarket.ke / admin123');
-    } catch (e) {
+    } catch {
       console.log('⚠ Admin user already exists');
     }
 
@@ -45,7 +43,7 @@ async function seed() {
     try {
       adminStmt.run('oracle@cashmarket.ke', 'Oracle User', oraclePasswordHash, 'oracle', 1);
       console.log('✓ Oracle user created: oracle@cashmarket.ke / oracle123');
-    } catch (e) {
+    } catch {
       console.log('⚠ Oracle user already exists');
     }
 
@@ -83,7 +81,7 @@ async function seed() {
           1 // Created by admin
         );
         console.log(`✓ Demo market created: "${market.question}" (ID: ${result.lastInsertRowid})`);
-      } catch (e) {
+      } catch {
         console.log(`⚠ Demo market already exists: "${market.question}"`);
       }
     }

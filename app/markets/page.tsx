@@ -4,11 +4,9 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import MarketCard from "@/components/MarketCard";
 import MobileNavigation from "@/components/MobileNavigation";
-import { useAuth } from "@/contexts/AuthContext";
 import { useMarkets } from "@/lib/hooks/useMarkets";
 
 export default function MarketsPage() {
-  const { isLoggedIn } = useAuth();
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");

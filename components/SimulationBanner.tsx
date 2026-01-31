@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 /**
  * Simulation Mode Banner
@@ -10,14 +10,11 @@ import { useState, useEffect } from "react";
  */
 export default function SimulationBanner() {
   const [dismissed, setDismissed] = useState(false);
-  const [isSimulation, setIsSimulation] = useState(false);
-
-  useEffect(() => {
-    // Check simulation mode on client side only
-    const simulationMode = process.env.NEXT_PUBLIC_SIMULATION_MODE === 'true' || 
-                          process.env.NODE_ENV === 'development';
-    setIsSimulation(simulationMode);
-  }, []);
+  // Calculate simulation mode directly without using useEffect
+  const isSimulation = typeof window !== 'undefined' && (
+    process.env.NEXT_PUBLIC_SIMULATION_MODE === 'true' || 
+    process.env.NODE_ENV === 'development'
+  );
 
   // Don't show banner if simulation mode is disabled or user dismissed it
   if (!isSimulation || dismissed) {

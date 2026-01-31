@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import MarketCard from "@/components/MarketCard";
 import MobileNavigation from "@/components/MobileNavigation";
@@ -237,12 +238,12 @@ export default function FavoritesPage() {
             <p className="text-muted-foreground mb-4">
               Start adding markets to your favorites by clicking the star icon on any market card
             </p>
-            <a
+            <Link
               href="/markets"
               className="inline-block px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary-hover transition"
             >
               Browse Markets
-            </a>
+            </Link>
           </div>
         )}
       </main>

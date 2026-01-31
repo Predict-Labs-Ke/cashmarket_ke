@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Navigation from "@/components/Navigation";
 import MobileNavigation from "@/components/MobileNavigation";
@@ -60,43 +60,12 @@ export default function MarketDetailsPage() {
   const [executing, setExecuting] = useState(false);
 
   // Price history for chart (simulated based on current state)
-  const [priceHistory, setPriceHistory] = useState<any[]>([]);
-
-  // Fetch market data
-  const fetchMarketData = async () => {
-    try {
-      setLoading(true);
-      const data = await getMarket(marketId);
-      setMarket(data.market);
-      setStats(data.stats);
-      setRecentTrades(data.recent_trades || []);
-      
-      // Generate initial price history (simulated - in production this would come from historical data)
-      const history = generatePriceHistory(data.market.yes_price);
-      setPriceHistory(history);
-      
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load market');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (marketId) {
-      fetchMarketData();
-      
-      // Poll for updates every 10 seconds
-      const interval = setInterval(fetchMarketData, 10000);
-      return () => clearInterval(interval);
-    }
-  }, [marketId]);
+  const [priceHistory, setPriceHistory] = useState<{ time: string; YES: number; NO: number }[]>([]);
 
   // Generate simulated price history
   // NOTE: This generates mock historical data for demonstration.
   // In production, this should be replaced with actual historical price data from the database.
-  const generatePriceHistory = (currentPrice: number) => {
+  const generatePriceHistory = useCallback((currentPrice: number) => {
     const history = [];
     const points = 20;
     let price = Math.max(0.3, Math.min(0.7, currentPrice - 0.15 + Math.random() * 0.1));
@@ -117,7 +86,38 @@ export default function MarketDetailsPage() {
     }
     
     return history;
-  };
+  }, []);
+
+  // Fetch market data
+  const fetchMarketData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await getMarket(marketId);
+      setMarket(data.market);
+      setStats(data.stats);
+      setRecentTrades(data.recent_trades || []);
+      
+      // Generate initial price history (simulated - in production this would come from historical data)
+      const history = generatePriceHistory(data.market.yes_price);
+      setPriceHistory(history);
+      
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load market');
+    } finally {
+      setLoading(false);
+    }
+  }, [marketId, generatePriceHistory]);
+
+  useEffect(() => {
+    if (marketId) {
+      fetchMarketData();
+      
+      // Poll for updates every 10 seconds
+      const interval = setInterval(fetchMarketData, 10000);
+      return () => clearInterval(interval);
+    }
+  }, [marketId, fetchMarketData]);
 
   // Calculate trade preview
   useEffect(() => {

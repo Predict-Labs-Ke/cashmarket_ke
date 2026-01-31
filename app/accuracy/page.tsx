@@ -62,7 +62,7 @@ export default function AccuracyPage() {
             <h1 className="text-3xl font-bold">Platform Accuracy</h1>
           </div>
           <p className="text-muted-foreground">
-            How accurate are CashMarket predictions? Explore our platform's forecasting performance.
+            How accurate are CashMarket predictions? Explore our platform&apos;s forecasting performance.
           </p>
         </div>
 
@@ -102,7 +102,7 @@ export default function AccuracyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mb-4">Accuracy Prior to Resolution</h2>
               <p className="text-muted-foreground mb-4">
-                Market probabilities become more accurate as resolution approaches. Here's how accurate 
+                Market probabilities become more accurate as resolution approaches. Here&apos;s how accurate 
                 the final leading outcome was at various time intervals before resolution.
               </p>
               
@@ -123,7 +123,7 @@ export default function AccuracyPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {accuracyBeforeResolution.map((item, idx) => (
+                      {accuracyBeforeResolution.map((item) => (
                         <tr
                           key={item.interval}
                           className="border-b border-border last:border-b-0 hover:bg-card-hover transition"
@@ -217,7 +217,7 @@ export default function AccuracyPage() {
               
               <div className="bg-card border border-card-border rounded-2xl p-6">
                 <div className="space-y-4">
-                  {brierScoreData.map((item, idx) => {
+                  {brierScoreData.map((item) => {
                     const maxScore = 0.25;
                     const scorePercentage = (item.brierScore / maxScore) * 100;
                     
@@ -323,7 +323,7 @@ export default function AccuracyPage() {
                   <p className="text-muted-foreground text-sm">
                     Accuracy reflects whether the final leading outcome (the option with the highest 
                     probability at each snapshot) matches the actual resolution. For example, if a market 
-                    showed 65% "Yes" four hours before resolution and resolved to "Yes", this contributes 
+                    showed 65% &quot;Yes&quot; four hours before resolution and resolved to &quot;Yes&quot;, this contributes 
                     to the accuracy percentage for that time interval.
                   </p>
                 </div>

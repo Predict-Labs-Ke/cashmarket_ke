@@ -25,7 +25,16 @@ export default function BuyModal({
   const [amount, setAmount] = useState(50);
   const [sliderValue, setSliderValue] = useState(50);
   const [isSliderActive, setIsSliderActive] = useState(false);
-  const [preview, setPreview] = useState<any>(null);
+  const [preview, setPreview] = useState<{
+    cost: number;
+    shares: number;
+    new_price_yes: number;
+    new_price_no: number;
+    potential_payout: number;
+    expected_return: number;
+    roi_percentage: number;
+    fee: number;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
