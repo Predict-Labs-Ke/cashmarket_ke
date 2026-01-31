@@ -138,22 +138,6 @@ export default function PortfolioPage() {
                 Withdraw
               </button>
             </div>
-
-            {/* Quick Actions */}
-            <div className="grid grid-cols-2 gap-4 mt-6">
-              <button className="bg-primary text-primary-foreground rounded-2xl p-4 font-semibold hover:bg-primary-hover transition active:scale-[0.98]">
-                <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Deposit
-              </button>
-              <button className="bg-card border border-card-border text-foreground rounded-2xl p-4 font-semibold hover:bg-card-hover transition active:scale-[0.98]">
-                <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                </svg>
-                Withdraw
-              </button>
-            </div>
           </div>
         )}
       </main>
