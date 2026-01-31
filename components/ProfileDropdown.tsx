@@ -1,38 +1,31 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ProfileDropdownProps {
-  userName?: string;
-  userAvatar?: string;
-  onLogout?: () => void;
-  isLoggedIn?: boolean;
   onSignIn?: () => void;
   onSignUp?: () => void;
 }
 
 export default function ProfileDropdown({ 
-  userName = "User", 
-  userAvatar,
-  onLogout,
-  isLoggedIn = false,
   onSignIn,
   onSignUp
 }: ProfileDropdownProps) {
+  const { isLoggedIn, user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   
   // Default avatar as SVG data URI
   const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E";
-  const avatarSrc = userAvatar || defaultAvatar;
+  const avatarSrc = user?.avatar || defaultAvatar;
+  const userName = user?.name || "User";
 
   // Load saved language preference on mount
   useEffect(() => {
@@ -73,13 +66,7 @@ export default function ProfileDropdown({
 
   const handleLogout = () => {
     setIsOpen(false);
-    if (onLogout) {
-      onLogout();
-    }
-    // Clear any user session data
-    localStorage.removeItem("userSession");
-    // Redirect to home/login page using Next.js router
-    router.push("/");
+    logout();
   };
 
   const languages = [

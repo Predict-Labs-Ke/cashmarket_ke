@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
 import ThemeToggle from "@/components/ThemeToggle";
 import MobileNavigation from "@/components/MobileNavigation";
 
 export default function Home() {
+  const { login } = useAuth();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -27,6 +29,31 @@ export default function Home() {
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
     localStorage.setItem("hasSeenOnboarding", "true");
+  };
+
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, this would validate credentials with the backend
+    // For demo purposes, we'll create a mock user session
+    const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E";
+    login({
+      name: "User",
+      avatar: defaultAvatar
+    });
+    setShowSignIn(false);
+  };
+
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, this would create a new user account
+    // For demo purposes, we'll create a mock user session
+    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+    const avatar = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3E${initials}%3C/text%3E%3C/svg%3E`;
+    login({
+      name: name || "User",
+      avatar: avatar
+    });
+    setShowSignUp(false);
   };
 
   return (
@@ -264,7 +291,7 @@ export default function Home() {
               </button>
             </div>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4" onSubmit={handleSignIn}>
               <div>
                 <label className="block text-sm font-medium text-foreground-secondary mb-2">
                   Phone Number
@@ -345,7 +372,7 @@ export default function Home() {
               </button>
             </div>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4" onSubmit={handleSignUp}>
               <div>
                 <label className="block text-sm font-medium text-foreground-secondary mb-2">
                   Full Name
