@@ -380,8 +380,10 @@ export default function MarketsPage() {
     const matchesCategory = selectedCategory === "All" || market.category === selectedCategory;
     const matchesSearch = market.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategoryFilter = selectedCategories.length === 0 || selectedCategories.includes(market.category);
-    // Since we don't have a resolved field in the data, treat all markets as active for now
-    // In production, this would check market.resolved or market.status
+    // NOTE: Status, Sort, and Frequency filters are UI-ready but not yet implemented in filtering logic
+    // In production: matchesStatus would check market.status or market.resolved field
+    // Sort would apply to filteredMarkets after filtering
+    // Frequency would check time-to-resolution against current date
     const matchesStatus = true; // All current sample markets are active
     return matchesCategory && matchesSearch && matchesCategoryFilter && matchesStatus;
   });
