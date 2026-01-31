@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface AuthContextType {
@@ -27,27 +27,46 @@ const MOCK_USER = {
 };
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<typeof MOCK_USER | null>(null);
-  const [status, setStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
-  const router = useRouter();
-
-  // Check for existing session on mount
-  useEffect(() => {
+  // Initialize state from localStorage on mount
+  const getInitialAuthState = () => {
+    if (typeof window === "undefined") {
+      return {
+        isLoggedIn: false,
+        user: null,
+        status: "unauthenticated" as const,
+      };
+    }
+    
     const savedAuth = localStorage.getItem("cashmarket_auth");
     if (savedAuth) {
       try {
         const authData = JSON.parse(savedAuth);
-        setUser(authData.user);
-        setIsLoggedIn(true);
-        setStatus("authenticated");
+        return {
+          user: authData.user,
+          isLoggedIn: true,
+          status: "authenticated" as const,
+        };
       } catch {
-        setStatus("unauthenticated");
+        return {
+          isLoggedIn: false,
+          user: null,
+          status: "unauthenticated" as const,
+        };
       }
-    } else {
-      setStatus("unauthenticated");
     }
-  }, []);
+    return {
+      isLoggedIn: false,
+      user: null,
+      status: "unauthenticated" as const,
+    };
+  };
+
+  const [authState, setAuthState] = useState<{
+    isLoggedIn: boolean;
+    user: typeof MOCK_USER | null;
+    status: "loading" | "authenticated" | "unauthenticated";
+  }>(getInitialAuthState);
+  const router = useRouter();
 
   const login = async (email: string, password: string, userType: string = 'user') => {
     // Simulate API delay
@@ -61,9 +80,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         role: userType,
       };
       
-      setUser(userData);
-      setIsLoggedIn(true);
-      setStatus("authenticated");
+      setAuthState({
+        user: userData,
+        isLoggedIn: true,
+        status: "authenticated",
+      });
       
       // Save to localStorage
       localStorage.setItem("cashmarket_auth", JSON.stringify({ user: userData }));
@@ -73,20 +94,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    setUser(null);
-    setIsLoggedIn(false);
-    setStatus("unauthenticated");
+    setAuthState({
+      user: null,
+      isLoggedIn: false,
+      status: "unauthenticated",
+    });
     localStorage.removeItem("cashmarket_auth");
     router.push("/");
   };
 
   return (
     <AuthContext.Provider value={{ 
-      isLoggedIn, 
-      user, 
+      isLoggedIn: authState.isLoggedIn, 
+      user: authState.user, 
       login, 
       logout,
-      status 
+      status: authState.status 
     }}>
       {children}
     </AuthContext.Provider>
