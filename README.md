@@ -31,7 +31,7 @@ A Next.js-based prediction market platform for Kenya, featuring LMSR (Logarithmi
 - Node.js 20+ 
 - npm or yarn
 
-### Installation
+### Quick Start
 
 ```bash
 # Clone the repository
@@ -46,6 +46,193 @@ npm run seed
 
 # Start development server
 npm run dev
+```
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory (optional for development):
+
+```bash
+# NextAuth Configuration
+NEXTAUTH_SECRET=your-secret-key-here
+NEXTAUTH_URL=http://localhost:3000
+
+# Database (SQLite is used by default)
+# DATABASE_URL=postgresql://user:password@localhost:5432/cashmarket
+
+# Optional: M-Pesa/Daraja API (for production)
+# MPESA_CONSUMER_KEY=your-key
+# MPESA_CONSUMER_SECRET=your-secret
+```
+
+### Developer Onboarding
+
+#### 1. Understanding the Architecture
+
+The app follows Next.js 14+ App Router structure:
+
+```
+app/              # Pages and routes
+├── api/          # API routes (backend)
+├── markets/      # Markets page
+├── portfolio/    # User portfolio
+└── admin/        # Admin dashboard
+
+components/       # Reusable UI components
+├── BuyModal.tsx  # Trading modal (connected to API)
+├── MarketCard.tsx # Market display
+└── Navigation.tsx
+
+lib/
+├── api/          # API client functions
+│   └── client.ts # Typed API methods
+├── hooks/        # React hooks
+│   ├── useMarkets.ts      # Fetch markets
+│   └── useUserBalance.ts  # Fetch user balance
+├── db/           # Database connection
+├── security/     # Auth & security utilities
+└── lmsr.ts       # LMSR pricing algorithm
+
+contexts/
+└── AuthContext.tsx # Auth state (NextAuth wrapper)
+```
+
+#### 2. Using API Hooks
+
+The application provides React hooks for easy data fetching:
+
+**Fetch Markets:**
+```typescript
+import { useMarkets } from '@/lib/hooks/useMarkets';
+
+function MarketsPage() {
+  const { markets, loading, error } = useMarkets({
+    status: 'active',
+    category: 'Economy'
+  });
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return <div>{markets.map(m => <MarketCard key={m.id} {...m} />)}</div>;
+}
+```
+
+**Fetch User Balance:**
+```typescript
+import { useUserBalance } from '@/lib/hooks/useUserBalance';
+
+function Portfolio() {
+  const { data, loading, error, refetch } = useUserBalance();
+
+  return (
+    <div>
+      <p>Balance: KES {data?.balance}</p>
+      <p>Portfolio Value: KES {data?.portfolio_value}</p>
+      <button onClick={refetch}>Refresh</button>
+    </div>
+  );
+}
+```
+
+#### 3. Making API Calls Directly
+
+You can also use the API client directly:
+
+```typescript
+import { 
+  getMarkets, 
+  executeTrade, 
+  calculateStake,
+  getUserBalance 
+} from '@/lib/api/client';
+
+// Get markets
+const { markets } = await getMarkets({ status: 'active' });
+
+// Calculate trade preview
+const preview = await calculateStake({
+  market_id: 1,
+  outcome: 'YES',
+  stake: 1000
+});
+
+// Execute trade
+const result = await executeTrade({
+  market_id: 1,
+  outcome: 'YES',
+  stake: 1000
+});
+
+// Get user balance
+const balance = await getUserBalance();
+```
+
+#### 4. Authentication
+
+The app uses NextAuth.js for authentication:
+
+```typescript
+import { useAuth } from '@/contexts/AuthContext';
+import { signIn, signOut } from 'next-auth/react';
+
+function MyComponent() {
+  const { isLoggedIn, user, status } = useAuth();
+
+  // Login
+  const handleLogin = async () => {
+    await signIn('credentials', {
+      email: 'john@test.com',
+      password: 'user123',
+      redirect: false
+    });
+  };
+
+  // Logout
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+  };
+
+  return (
+    <div>
+      {isLoggedIn ? (
+        <>
+          <p>Welcome, {user?.name}!</p>
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      ) : (
+        <button onClick={handleLogin}>Login</button>
+      )}
+    </div>
+  );
+}
+```
+
+#### 5. Protected Routes
+
+For admin-only pages:
+
+```typescript
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+function AdminPage() {
+  const { isLoggedIn, user, status } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status !== 'loading' && (!isLoggedIn || user?.role !== 'admin')) {
+      router.push('/');
+    }
+  }, [isLoggedIn, user, status, router]);
+
+  if (status === 'loading' || !isLoggedIn || user?.role !== 'admin') {
+    return null;
+  }
+
+  return <div>Admin Dashboard Content</div>;
+}
 ```
 
 The app will be available at [http://localhost:3000](http://localhost:3000)
