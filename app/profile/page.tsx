@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
@@ -65,6 +67,8 @@ const mockUserData = {
 };
 
 export default function ProfilePage() {
+  const { isLoggedIn } = useAuth();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"active" | "past">("active");
   const [flipCard, setFlipCard] = useState<number | null>(null);
   const [animatedStats, setAnimatedStats] = useState({
@@ -75,8 +79,17 @@ export default function ProfilePage() {
   });
   const [percentileProgress, setPercentileProgress] = useState(0);
 
+  // Redirect to home if not logged in
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push("/");
+    }
+  }, [isLoggedIn, router]);
+
   // Animate stats on load
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     const duration = 1500; // 1.5 seconds
     const steps = 60;
     const interval = duration / steps;
@@ -100,10 +113,12 @@ export default function ProfilePage() {
     }, interval);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isLoggedIn]);
 
   // Animate percentile progress
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     const targetPercentile = ((mockUserData.totalUsers - mockUserData.rank) / mockUserData.totalUsers) * 100;
     const duration = 2000;
     const steps = 60;
@@ -122,7 +137,12 @@ export default function ProfilePage() {
     }, interval);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isLoggedIn]);
+
+  // Don't render anything if not logged in
+  if (!isLoggedIn) {
+    return null;
+  }
 
   const activeMarkets = mockUserData.activeMarkets.filter(m => m.status === "open");
   const pastMarkets = mockUserData.activeMarkets.filter(m => m.status === "resolved");
@@ -132,9 +152,6 @@ export default function ProfilePage() {
       <Navigation 
         currentPage="profile" 
         showPortfolioBalance={true}
-        isLoggedIn={true}
-        userName={mockUserData.name}
-        userAvatar={mockUserData.avatar}
       />
 
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-8">

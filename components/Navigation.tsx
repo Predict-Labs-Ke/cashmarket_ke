@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
 
 interface NavigationProps {
@@ -10,10 +11,6 @@ interface NavigationProps {
   showPortfolioBalance?: boolean;
   portfolioBalance?: number;
   cashDeposit?: number;
-  isLoggedIn?: boolean;
-  userName?: string;
-  userAvatar?: string;
-  onLogout?: () => void;
 }
 
 export default function Navigation({ 
@@ -23,11 +20,9 @@ export default function Navigation({
   showPortfolioBalance = false,
   portfolioBalance = 1000,
   cashDeposit = 500,
-  isLoggedIn = false,
-  userName = "User",
-  userAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E",
-  onLogout
 }: NavigationProps) {
+  const { isLoggedIn } = useAuth();
+
   return (
     <>
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
@@ -101,8 +96,8 @@ export default function Navigation({
 
             {/* Auth Buttons & Portfolio Balance */}
             <div className="flex items-center gap-3">
-              {/* Portfolio Balance - Desktop Only */}
-              {showPortfolioBalance && (
+              {/* Portfolio Balance - Desktop Only - Only show when logged in */}
+              {showPortfolioBalance && isLoggedIn && (
                 <div className="hidden lg:flex items-center gap-6 mr-4">
                   <div className="flex flex-col items-start">
                     <span className="text-xs text-muted-foreground">Portfolio</span>
@@ -121,10 +116,6 @@ export default function Navigation({
               
               {/* Profile Dropdown - Always shown */}
               <ProfileDropdown 
-                isLoggedIn={isLoggedIn}
-                userName={userName}
-                userAvatar={userAvatar}
-                onLogout={onLogout}
                 onSignIn={onSignIn}
                 onSignUp={onSignUp}
               />

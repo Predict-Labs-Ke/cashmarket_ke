@@ -1,12 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 import MobileNavigation from "@/components/MobileNavigation";
 
 export default function PortfolioPage() {
+  const { isLoggedIn } = useAuth();
+  const router = useRouter();
   const [portfolioBalance] = useState(1000);
   const [cashDeposit] = useState(500);
+
+  // Redirect to home if not logged in
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push("/");
+    }
+  }, [isLoggedIn, router]);
+
+  // Don't render anything if not logged in
+  if (!isLoggedIn) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-24 lg:pb-8">
