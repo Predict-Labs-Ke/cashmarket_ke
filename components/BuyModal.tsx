@@ -28,7 +28,7 @@ export default function BuyModal({
 
   // Handle quick add buttons
   const handleQuickAdd = (value: number) => {
-    setAmount((prev) => prev + value);
+    setAmount((prev) => Math.min(prev + value, 10000));
   };
 
   // Handle amount input change
@@ -37,7 +37,8 @@ export default function BuyModal({
     if (value === "") {
       setAmount(0);
     } else {
-      setAmount(parseInt(value, 10));
+      const numValue = parseInt(value, 10);
+      setAmount(Math.min(numValue, 10000));
     }
   };
 
@@ -198,19 +199,15 @@ export default function BuyModal({
               onMouseUp={handleSliderMouseUp}
               onTouchStart={handleSliderMouseDown}
               onTouchEnd={handleSliderMouseUp}
-              className={`w-full h-3 rounded-lg appearance-none cursor-pointer transition-all ${
-                isSliderActive
-                  ? "bg-gradient-to-r from-primary to-primary-hover"
-                  : "bg-muted"
-              }`}
+              className="w-full h-3 rounded-lg appearance-none cursor-pointer transition-all"
               style={{
                 background: isSliderActive
-                  ? `linear-gradient(to right, rgb(22, 163, 74) 0%, rgb(22, 163, 74) ${
+                  ? `linear-gradient(to right, var(--primary) 0%, var(--primary) ${
                       (sliderValue / 10000) * 100
-                    }%, rgb(229, 231, 235) ${
+                    }%, var(--muted) ${
                       (sliderValue / 10000) * 100
-                    }%, rgb(229, 231, 235) 100%)`
-                  : undefined,
+                    }%, var(--muted) 100%)`
+                  : "var(--muted)",
               }}
             />
             <div className="flex justify-between text-xs text-muted-foreground mt-2">
@@ -225,7 +222,19 @@ export default function BuyModal({
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Estimated shares:</span>
             <span className="font-semibold">
-              {Math.round(amount / (direction === "yes" ? currentPercentage : 100 - currentPercentage) * 100)}{" "}
+              {(() => {
+                // Calculate estimated shares based on current market probability
+                // Formula: (amount / market_price) where market_price is the current percentage (0-1)
+                // Multiply by 100 to convert percentage to decimal, then normalize to get shares
+                const marketPrice = direction === "yes" ? currentPercentage : 100 - currentPercentage;
+                
+                // Prevent division by zero for edge cases (0% or 100% probability)
+                if (marketPrice === 0) {
+                  return 0;
+                }
+                
+                return Math.round((amount / marketPrice) * 100);
+              })()}{" "}
               shares
             </span>
           </div>
