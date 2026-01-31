@@ -9,7 +9,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import MobileNavigation from "@/components/MobileNavigation";
 
 export default function Home() {
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -17,14 +17,14 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  // Show onboarding carousel on first visit (client-side only)
+  // Show onboarding carousel on first visit only when NOT logged in (client-side only)
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
-    if (!hasSeenOnboarding) {
+    if (!hasSeenOnboarding && !isLoggedIn) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowOnboarding(true);
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
