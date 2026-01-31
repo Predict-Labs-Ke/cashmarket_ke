@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { calculateStake, executeTrade } from "@/lib/api/client";
 
 interface BuyModalProps {
   isOpen: boolean;
@@ -8,6 +9,8 @@ interface BuyModalProps {
   direction: "yes" | "no";
   marketTitle: string;
   currentPercentage: number;
+  marketId: number;
+  onTradeSuccess?: () => void;
 }
 
 export default function BuyModal({
@@ -16,15 +19,46 @@ export default function BuyModal({
   direction,
   marketTitle,
   currentPercentage,
+  marketId,
+  onTradeSuccess,
 }: BuyModalProps) {
   const [amount, setAmount] = useState(50);
   const [sliderValue, setSliderValue] = useState(50);
   const [isSliderActive, setIsSliderActive] = useState(false);
+  const [preview, setPreview] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Sync slider with amount input
   useEffect(() => {
     setSliderValue(amount);
   }, [amount]);
+
+  // Calculate stake preview when amount changes
+  useEffect(() => {
+    const fetchPreview = async () => {
+      if (amount <= 0) {
+        setPreview(null);
+        return;
+      }
+
+      try {
+        const result = await calculateStake({
+          market_id: marketId,
+          outcome: direction.toUpperCase() as "YES" | "NO",
+          stake: amount,
+        });
+        setPreview(result);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to calculate stake:', err);
+        setPreview(null);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchPreview, 300); // Debounce API calls
+    return () => clearTimeout(timeoutId);
+  }, [amount, marketId, direction]);
 
   // Handle quick add buttons
   const handleQuickAdd = (value: number) => {
@@ -59,10 +93,26 @@ export default function BuyModal({
   };
 
   // Handle buy confirmation
-  const handleBuy = () => {
-    // TODO: Implement actual buy logic
-    console.log(`Buying ${direction.toUpperCase()} for KES ${amount}`);
-    onClose();
+  const handleBuy = async () => {
+    if (amount <= 0) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await executeTrade({
+        market_id: marketId,
+        outcome: direction.toUpperCase() as "YES" | "NO",
+        stake: amount,
+      });
+      
+      onTradeSuccess?.();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Trade failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Handle escape key
@@ -217,47 +267,60 @@ export default function BuyModal({
           </div>
         </div>
 
-        {/* Estimated Shares */}
-        <div className="bg-muted rounded-xl p-3 mb-6">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Estimated shares:</span>
-            <span className="font-semibold">
-              {(() => {
-                // Calculate estimated shares based on current market probability
-                // Formula: (amount / market_price) where market_price is the current percentage (0-1)
-                // Multiply by 100 to convert percentage to decimal, then normalize to get shares
-                const marketPrice = direction === "yes" ? currentPercentage : 100 - currentPercentage;
-                
-                // Prevent division by zero for edge cases (0% or 100% probability)
-                if (marketPrice === 0) {
-                  return 0;
-                }
-                
-                return Math.round((amount / marketPrice) * 100);
-              })()}{" "}
-              shares
-            </span>
+        {/* Trade Preview */}
+        {preview && (
+          <div className="bg-muted rounded-xl p-3 mb-6 space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Shares:</span>
+              <span className="font-semibold">{preview.shares.toFixed(2)}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Trading Fee:</span>
+              <span className="font-semibold">KES {preview.fee.toFixed(2)}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Total Cost:</span>
+              <span className="font-semibold">KES {preview.cost.toFixed(2)}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Potential Payout:</span>
+              <span className="font-semibold text-primary">KES {preview.potential_payout.toFixed(2)}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">ROI:</span>
+              <span className={`font-semibold ${preview.roi_percentage > 0 ? 'text-primary' : 'text-destructive'}`}>
+                {preview.roi_percentage.toFixed(1)}%
+              </span>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-destructive/10 border border-destructive/20 text-destructive rounded-xl p-3 mb-6 text-sm">
+            {error}
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-3 px-4 bg-muted hover:bg-muted/80 text-foreground font-medium rounded-xl transition"
+            disabled={loading}
+            className="flex-1 py-3 px-4 bg-muted hover:bg-muted/80 text-foreground font-medium rounded-xl transition disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             onClick={handleBuy}
-            disabled={amount <= 0}
+            disabled={amount <= 0 || loading || !preview}
             className={`flex-1 py-3 px-4 font-medium rounded-xl transition ${
               direction === "yes"
                 ? "bg-primary hover:bg-primary-hover text-white"
                 : "bg-destructive hover:bg-destructive/90 text-white"
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            Buy {direction.toUpperCase()}
+            {loading ? 'Processing...' : `Buy ${direction.toUpperCase()}`}
           </button>
         </div>
 
