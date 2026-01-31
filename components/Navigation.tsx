@@ -21,7 +21,7 @@ export default function Navigation({
   portfolioBalance = 1000,
   cashDeposit = 500,
 }: NavigationProps) {
-  const { isLoggedIn, user, logout } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   return (
     <>

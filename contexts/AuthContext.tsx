@@ -15,25 +15,34 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Helper function to get initial auth state from localStorage
+function getInitialAuthState() {
+  if (typeof window === 'undefined') {
+    return { isLoggedIn: false, user: null };
+  }
+  
+  const userSession = localStorage.getItem("userSession");
+  if (userSession) {
+    try {
+      const userData = JSON.parse(userSession);
+      return { isLoggedIn: true, user: userData };
+    } catch {
+      localStorage.removeItem("userSession");
+    }
+  }
+  return { isLoggedIn: false, user: null };
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<{ name: string; avatar: string } | null>(null);
   const [mounted, setMounted] = useState(false);
+  const initialState = getInitialAuthState();
+  const [isLoggedIn, setIsLoggedIn] = useState(initialState.isLoggedIn);
+  const [user, setUser] = useState<{ name: string; avatar: string } | null>(initialState.user);
   const router = useRouter();
 
-  // Check for existing session on mount
+  // Mark as mounted after first render
   useEffect(() => {
-    const userSession = localStorage.getItem("userSession");
-    if (userSession) {
-      try {
-        const userData = JSON.parse(userSession);
-        setUser(userData);
-        setIsLoggedIn(true);
-      } catch (error) {
-        // Invalid session data, clear it
-        localStorage.removeItem("userSession");
-      }
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
