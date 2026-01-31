@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import BuyModal from "./BuyModal";
 
 interface MarketCardProps {
   id: number;
@@ -105,6 +106,8 @@ export default function MarketCard({
     }
   });
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [buyDirection, setBuyDirection] = useState<"yes" | "no">("yes");
 
   // Update countdown every minute
   useEffect(() => {
@@ -134,6 +137,13 @@ export default function MarketCard({
       // Handle corrupted localStorage gracefully
       console.error("Failed to update favorites");
     }
+  };
+
+  // Handle buy button clicks
+  const handleBuyClick = (e: React.MouseEvent, direction: "yes" | "no") => {
+    e.stopPropagation();
+    setBuyDirection(direction);
+    setShowBuyModal(true);
   };
 
   return (
@@ -272,13 +282,28 @@ export default function MarketCard({
 
       {/* Trade Buttons */}
       <div className="grid grid-cols-2 gap-2">
-        <button className="py-2.5 bg-primary-muted hover:bg-primary/20 active:bg-primary/30 border border-primary/50 text-primary rounded-xl font-medium transition">
+        <button 
+          onClick={(e) => handleBuyClick(e, "yes")}
+          className="py-2.5 bg-primary-muted hover:bg-primary/20 active:bg-primary/30 border border-primary/50 text-primary rounded-xl font-medium transition"
+        >
           Buy Yes
         </button>
-        <button className="py-2.5 bg-destructive-muted hover:bg-destructive/20 active:bg-destructive/30 border border-destructive/50 text-destructive rounded-xl font-medium transition">
+        <button 
+          onClick={(e) => handleBuyClick(e, "no")}
+          className="py-2.5 bg-destructive-muted hover:bg-destructive/20 active:bg-destructive/30 border border-destructive/50 text-destructive rounded-xl font-medium transition"
+        >
           Buy No
         </button>
       </div>
+
+      {/* Buy Modal */}
+      <BuyModal
+        isOpen={showBuyModal}
+        onClose={() => setShowBuyModal(false)}
+        direction={buyDirection}
+        marketTitle={title}
+        currentPercentage={yesPercentage}
+      />
     </div>
   );
 }
