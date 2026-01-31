@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "reset-simulation": "tsx scripts/reset-simulation.ts"
   },
   "dependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -28,6 +29,6 @@
     "eslint-config-next": "16.1.4",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "5.9.3"
   }
 }

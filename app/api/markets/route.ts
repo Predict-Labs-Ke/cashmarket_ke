@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { calculatePrices } from "@/lib/lmsr";
 import type { Market } from "@/lib/types";
+import { isSimulationMode, getDataSourceLabel } from "@/lib/data/simulation";
 
 /**
  * GET /api/markets
@@ -85,6 +86,8 @@ export async function GET(request: NextRequest) {
       total: marketsWithPrices.length,
       limit,
       offset,
+      _simulation: isSimulationMode(),
+      _data_source: getDataSourceLabel(),
     });
   } catch (error) {
     console.error('Error fetching markets:', error);
