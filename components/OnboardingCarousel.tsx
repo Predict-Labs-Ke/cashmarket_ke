@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface OnboardingCarouselProps {
   onClose: () => void;
@@ -8,34 +9,38 @@ interface OnboardingCarouselProps {
 
 const slides = [
   {
-    title: "What are Prediction Markets?",
-    description: "Prediction markets let you trade on the outcomes of real-world events. Buy shares in outcomes you believe will happen—if you're right, you earn money!",
+    title: "A Probability Market, Not Betting",
+    description: "CashMarket KE is a prediction market where you trade shares based on your knowledge and analysis of real-world events. Unlike betting, prices reflect collective wisdom and probability—making it a skill-based platform for informed decision-making.",
     icon: "📊",
     color: "from-primary/20 to-primary/5",
   },
   {
-    title: "How Resolution Works",
-    description: "When an event concludes, official sources verify the outcome. Markets are resolved based on credible data—ensuring fair and transparent results for all traders.",
+    title: "How Markets Are Resolved",
+    description: "Every market resolves using publicly verifiable data from credible sources. For example: Sports outcomes use official league results, economic events use Central Bank data, and political events use IEBC announcements. No manipulation—just facts.",
     icon: "✅",
     color: "from-info/20 to-info/5",
   },
   {
-    title: "How Payouts Work",
-    description: "When a market resolves in your favor, you receive KES 100 per winning share. Funds are instantly paid out to your M-Pesa account—fast, secure, and hassle-free.",
-    icon: "💰",
+    title: "Built for Kenya, Trusted by Kenyans",
+    description: "Trade with confidence using M-Pesa for instant deposits and withdrawals. We focus on local markets—from Harambee Stars to KES/USD rates. Join 8,000+ Kenyan traders who trust our transparent, fair, and secure platform.",
+    icon: "🇰🇪",
     color: "from-warning/20 to-warning/5",
   },
 ];
 
 export default function OnboardingCarousel({ onClose }: OnboardingCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const router = useRouter();
 
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
-    } else {
-      onClose();
     }
+  };
+
+  const handleGetStarted = () => {
+    onClose();
+    router.push("/markets");
   };
 
   const prevSlide = () => {
@@ -120,11 +125,11 @@ export default function OnboardingCarousel({ onClose }: OnboardingCarouselProps)
               Back
             </button>
             <button
-              onClick={nextSlide}
+              onClick={currentSlide === slides.length - 1 ? handleGetStarted : nextSlide}
               className="px-8 py-3 bg-primary hover:bg-primary-hover text-primary-foreground rounded-xl font-semibold transition"
-              aria-label={currentSlide === slides.length - 1 ? "Get started" : "Go to next slide"}
+              aria-label={currentSlide === slides.length - 1 ? "Explore live markets" : "Go to next slide"}
             >
-              {currentSlide === slides.length - 1 ? "Get Started" : "Next"}
+              {currentSlide === slides.length - 1 ? "Explore Live Markets" : "Next"}
             </button>
           </div>
         </div>
