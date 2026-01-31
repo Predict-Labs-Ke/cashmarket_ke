@@ -155,18 +155,6 @@ export default function ProfileDropdown({
                   <span className="text-sm font-medium">Favorite Markets</span>
                 </Link>
 
-                {/* Accuracy */}
-                <Link
-                  href="/accuracy"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-card-hover transition"
-                >
-                  <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  <span className="text-sm font-medium">Accuracy</span>
-                </Link>
-
                 {/* Dark/Light Mode Toggle */}
                 <div className="px-4 py-3 hover:bg-card-hover transition flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -319,6 +307,34 @@ export default function ProfileDropdown({
                   >
                     Sign Up
                   </button>
+                </div>
+              </div>
+
+              {/* Menu Items for Non-Logged In Users */}
+              <div className="border-t border-border pt-2">
+                {/* Accuracy - Available to all users */}
+                <Link
+                  href="/accuracy"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-card-hover transition"
+                >
+                  <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <span className="text-sm font-medium">CashMarket Accuracy</span>
+                </Link>
+
+                {/* Dark/Light Mode Toggle */}
+                <div className="px-4 py-3 hover:bg-card-hover transition flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 text-muted-foreground">
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium">Theme</span>
+                  </div>
+                  <ThemeToggle />
                 </div>
               </div>
             </>

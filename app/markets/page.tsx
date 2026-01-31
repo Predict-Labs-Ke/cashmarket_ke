@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import MarketCard from "@/components/MarketCard";
 import MobileNavigation from "@/components/MobileNavigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Sample prediction markets data with enhanced fields
 const predictionMarkets = [
@@ -13,10 +14,13 @@ const predictionMarkets = [
     category: "Economy",
     yesPercentage: 42,
     volume: "KES 2.4M",
+    volumeNumeric: 2400000,
     endDate: "Apr 30, 2026",
+    createdDate: "Jan 15, 2026",
     trending: true,
     resolutionSource: "Central Bank of Kenya",
     movement24h: -2,
+    resolved: false,
   },
   {
     id: 2,
@@ -24,10 +28,13 @@ const predictionMarkets = [
     category: "Events",
     yesPercentage: 67,
     volume: "KES 890K",
+    volumeNumeric: 890000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 20, 2026",
     trending: true,
     resolutionSource: "Official event organizers",
     movement24h: 5,
+    resolved: false,
   },
   {
     id: 3,
@@ -35,10 +42,13 @@ const predictionMarkets = [
     category: "Tech",
     yesPercentage: 78,
     volume: "KES 1.8M",
+    volumeNumeric: 1800000,
     endDate: "Dec 31, 2026",
+    createdDate: "Dec 15, 2025",
     trending: false,
     resolutionSource: "Safaricom Annual Report",
     movement24h: 3,
+    resolved: true,
   },
   {
     id: 4,
@@ -46,10 +56,13 @@ const predictionMarkets = [
     category: "Sports",
     yesPercentage: 35,
     volume: "KES 5.2M",
+    volumeNumeric: 5200000,
     endDate: "Nov 15, 2026",
+    createdDate: "Jan 10, 2026",
     trending: true,
     resolutionSource: "CAF Official Results",
     movement24h: -1,
+    resolved: false,
   },
   {
     id: 5,
@@ -57,10 +70,13 @@ const predictionMarkets = [
     category: "Environment",
     yesPercentage: 54,
     volume: "KES 620K",
+    volumeNumeric: 620000,
     endDate: "Dec 31, 2026",
+    createdDate: "Dec 20, 2025",
     trending: false,
     resolutionSource: "Ministry of Energy",
     movement24h: 0,
+    resolved: false,
   },
   {
     id: 6,
@@ -68,10 +84,13 @@ const predictionMarkets = [
     category: "Infrastructure",
     yesPercentage: 28,
     volume: "KES 3.1M",
+    volumeNumeric: 3100000,
     endDate: "Dec 31, 2027",
+    createdDate: "Jan 5, 2026",
     trending: false,
     resolutionSource: "Kenya Railways",
     movement24h: 2,
+    resolved: false,
   },
   {
     id: 7,
@@ -79,10 +98,13 @@ const predictionMarkets = [
     category: "Economy",
     yesPercentage: 45,
     volume: "KES 1.2M",
+    volumeNumeric: 1200000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 1, 2026",
     trending: false,
     resolutionSource: "Kenya National Bureau of Statistics",
     movement24h: 1,
+    resolved: false,
   },
   {
     id: 8,
@@ -90,10 +112,13 @@ const predictionMarkets = [
     category: "Sports",
     yesPercentage: 62,
     volume: "KES 4.8M",
+    volumeNumeric: 4800000,
     endDate: "Nov 30, 2026",
+    createdDate: "Jan 25, 2026",
     trending: true,
     resolutionSource: "Football Kenya Federation",
     movement24h: 4,
+    resolved: true,
   },
   {
     id: 9,
@@ -101,10 +126,13 @@ const predictionMarkets = [
     category: "Weather",
     yesPercentage: 58,
     volume: "KES 420K",
+    volumeNumeric: 420000,
     endDate: "Mar 31, 2026",
+    createdDate: "Jan 28, 2026",
     trending: false,
     resolutionSource: "Kenya Meteorological Department",
     movement24h: -3,
+    resolved: false,
   },
   {
     id: 10,
@@ -112,10 +140,13 @@ const predictionMarkets = [
     category: "Weather",
     yesPercentage: 71,
     volume: "KES 310K",
+    volumeNumeric: 310000,
     endDate: "Feb 28, 2026",
+    createdDate: "Jan 29, 2026",
     trending: false,
     resolutionSource: "Kenya Meteorological Department",
     movement24h: 0,
+    resolved: false,
   },
   {
     id: 11,
@@ -123,10 +154,13 @@ const predictionMarkets = [
     category: "Weather",
     yesPercentage: 44,
     volume: "KES 580K",
+    volumeNumeric: 580000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 12, 2026",
     trending: true,
     resolutionSource: "Kenya Meteorological Department",
     movement24h: -5,
+    resolved: false,
   },
   {
     id: 12,
@@ -134,10 +168,13 @@ const predictionMarkets = [
     category: "Weather",
     yesPercentage: 82,
     volume: "KES 275K",
+    volumeNumeric: 275000,
     endDate: "Jul 31, 2026",
+    createdDate: "Jan 8, 2026",
     trending: false,
     resolutionSource: "Kenya Wildlife Service",
     movement24h: 0,
+    resolved: false,
   },
   {
     id: 13,
@@ -145,10 +182,13 @@ const predictionMarkets = [
     category: "Tech",
     yesPercentage: 73,
     volume: "KES 1.5M",
+    volumeNumeric: 1500000,
     endDate: "Dec 31, 2027",
+    createdDate: "Dec 28, 2025",
     trending: false,
     resolutionSource: "Safaricom Reports",
     movement24h: 2,
+    resolved: false,
   },
   {
     id: 14,
@@ -156,10 +196,13 @@ const predictionMarkets = [
     category: "Sports",
     yesPercentage: 18,
     volume: "KES 890K",
+    volumeNumeric: 890000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 3, 2026",
     trending: false,
     resolutionSource: "FIA Official Announcements",
     movement24h: -1,
+    resolved: false,
   },
   {
     id: 15,
@@ -167,10 +210,13 @@ const predictionMarkets = [
     category: "Infrastructure",
     yesPercentage: 65,
     volume: "KES 2.1M",
+    volumeNumeric: 2100000,
     endDate: "Jun 30, 2026",
+    createdDate: "Jan 22, 2026",
     trending: true,
     resolutionSource: "KeNHA Official Statements",
     movement24h: 3,
+    resolved: false,
   },
   {
     id: 16,
@@ -178,10 +224,13 @@ const predictionMarkets = [
     category: "Economy",
     yesPercentage: 38,
     volume: "KES 1.8M",
+    volumeNumeric: 1800000,
     endDate: "Dec 31, 2026",
+    createdDate: "Dec 10, 2025",
     trending: false,
     resolutionSource: "Kenya National Bureau of Statistics",
     movement24h: -2,
+    resolved: false,
   },
   {
     id: 17,
@@ -189,10 +238,13 @@ const predictionMarkets = [
     category: "Infrastructure",
     yesPercentage: 52,
     volume: "KES 3.5M",
+    volumeNumeric: 3500000,
     endDate: "Dec 31, 2027",
+    createdDate: "Jan 6, 2026",
     trending: false,
     resolutionSource: "Kenya Urban Roads Authority",
     movement24h: 1,
+    resolved: false,
   },
   {
     id: 18,
@@ -200,10 +252,13 @@ const predictionMarkets = [
     category: "Sports",
     yesPercentage: 24,
     volume: "KES 2.3M",
+    volumeNumeric: 2300000,
     endDate: "Nov 30, 2026",
+    createdDate: "Dec 25, 2025",
     trending: false,
     resolutionSource: "Football Kenya Federation",
     movement24h: -1,
+    resolved: false,
   },
   {
     id: 19,
@@ -211,10 +266,13 @@ const predictionMarkets = [
     category: "Tech",
     yesPercentage: 41,
     volume: "KES 950K",
+    volumeNumeric: 950000,
     endDate: "Dec 31, 2027",
+    createdDate: "Dec 18, 2025",
     trending: false,
     resolutionSource: "Kenya Space Agency",
     movement24h: 2,
+    resolved: false,
   },
   {
     id: 20,
@@ -222,10 +280,13 @@ const predictionMarkets = [
     category: "Infrastructure",
     yesPercentage: 58,
     volume: "KES 1.4M",
+    volumeNumeric: 1400000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 17, 2026",
     trending: false,
     resolutionSource: "Kenya Railways",
     movement24h: 0,
+    resolved: false,
   },
   {
     id: 21,
@@ -233,10 +294,13 @@ const predictionMarkets = [
     category: "Economy",
     yesPercentage: 47,
     volume: "KES 720K",
+    volumeNumeric: 720000,
     endDate: "Dec 31, 2026",
+    createdDate: "Dec 5, 2025",
     trending: false,
     resolutionSource: "Coffee Directorate of Kenya",
     movement24h: 1,
+    resolved: false,
   },
   {
     id: 22,
@@ -244,10 +308,13 @@ const predictionMarkets = [
     category: "Environment",
     yesPercentage: 62,
     volume: "KES 480K",
+    volumeNumeric: 480000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 14, 2026",
     trending: false,
     resolutionSource: "Kenya Wildlife Service",
     movement24h: -2,
+    resolved: false,
   },
   {
     id: 23,
@@ -255,10 +322,13 @@ const predictionMarkets = [
     category: "Sports",
     yesPercentage: 56,
     volume: "KES 1.9M",
+    volumeNumeric: 1900000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 27, 2026",
     trending: true,
     resolutionSource: "CAF Official Results",
     movement24h: 3,
+    resolved: false,
   },
   {
     id: 24,
@@ -266,10 +336,13 @@ const predictionMarkets = [
     category: "Tech",
     yesPercentage: 68,
     volume: "KES 1.1M",
+    volumeNumeric: 1100000,
     endDate: "Dec 31, 2027",
+    createdDate: "Dec 22, 2025",
     trending: false,
     resolutionSource: "Konza Technopolis Authority",
     movement24h: 2,
+    resolved: false,
   },
   {
     id: 25,
@@ -277,10 +350,13 @@ const predictionMarkets = [
     category: "Economy",
     yesPercentage: 51,
     volume: "KES 1.3M",
+    volumeNumeric: 1300000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 4, 2026",
     trending: false,
     resolutionSource: "Tea Board of Kenya",
     movement24h: 0,
+    resolved: false,
   },
   {
     id: 26,
@@ -288,10 +364,13 @@ const predictionMarkets = [
     category: "Infrastructure",
     yesPercentage: 72,
     volume: "KES 2.8M",
+    volumeNumeric: 2800000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 24, 2026",
     trending: true,
     resolutionSource: "Lamu Port-South Sudan-Ethiopia Transport",
     movement24h: 4,
+    resolved: false,
   },
   {
     id: 27,
@@ -299,10 +378,13 @@ const predictionMarkets = [
     category: "Environment",
     yesPercentage: 45,
     volume: "KES 890K",
+    volumeNumeric: 890000,
     endDate: "Dec 31, 2027",
+    createdDate: "Dec 12, 2025",
     trending: false,
     resolutionSource: "Ministry of Energy",
     movement24h: 1,
+    resolved: false,
   },
   {
     id: 28,
@@ -310,10 +392,13 @@ const predictionMarkets = [
     category: "Weather",
     yesPercentage: 67,
     volume: "KES 540K",
+    volumeNumeric: 540000,
     endDate: "Sep 30, 2026",
+    createdDate: "Jan 11, 2026",
     trending: false,
     resolutionSource: "Kenya Meteorological Department",
     movement24h: -3,
+    resolved: false,
   },
   {
     id: 29,
@@ -321,10 +406,13 @@ const predictionMarkets = [
     category: "Economy",
     yesPercentage: 34,
     volume: "KES 2.5M",
+    volumeNumeric: 2500000,
     endDate: "Dec 31, 2026",
+    createdDate: "Jan 2, 2026",
     trending: false,
     resolutionSource: "Nairobi Securities Exchange",
     movement24h: -1,
+    resolved: false,
   },
   {
     id: 30,
@@ -332,10 +420,13 @@ const predictionMarkets = [
     category: "Sports",
     yesPercentage: 76,
     volume: "KES 3.2M",
+    volumeNumeric: 3200000,
     endDate: "Dec 31, 2027",
+    createdDate: "Jan 26, 2026",
     trending: true,
     resolutionSource: "World Rugby",
     movement24h: 5,
+    resolved: false,
   },
 ];
 
@@ -358,8 +449,36 @@ export default function MarketsPage() {
   const [frequency, setFrequency] = useState("All");
   const [status, setStatus] = useState("Active");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  const { login } = useAuth();
 
   const hasActiveFilters = sortBy !== "24h Volume" || frequency !== "All" || status !== "Active" || selectedCategories.length > 0;
+
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    const defaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3EU%3C/text%3E%3C/svg%3E";
+    login({
+      name: "User",
+      avatar: defaultAvatar
+    });
+    setShowSignIn(false);
+  };
+
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+    const initials = name.split(' ').filter(n => n.length > 0).map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+    const avatar = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3E${initials}%3C/text%3E%3C/svg%3E`;
+    login({
+      name: name || "User",
+      avatar: avatar
+    });
+    setShowSignUp(false);
+  };
 
   const handleClearFilters = () => {
     setSortBy("24h Volume");
@@ -376,24 +495,70 @@ export default function MarketsPage() {
     );
   };
 
-  const filteredMarkets = predictionMarkets.filter((market) => {
-    const matchesCategory = selectedCategory === "All" || market.category === selectedCategory;
-    const matchesSearch = market.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategoryFilter = selectedCategories.length === 0 || selectedCategories.includes(market.category);
-    // NOTE: Status, Sort, and Frequency filters are UI-ready but not yet implemented in filtering logic
-    // In production: matchesStatus would check market.status or market.resolved field
-    // Sort would apply to filteredMarkets after filtering
-    // Frequency would check time-to-resolution against current date
-    const matchesStatus = true; // All current sample markets are active
-    return matchesCategory && matchesSearch && matchesCategoryFilter && matchesStatus;
-  });
+  // Helper function to calculate days until resolution
+  const getDaysUntilResolution = (endDateStr: string): number => {
+    const end = new Date(endDateStr);
+    const now = new Date();
+    const diff = end.getTime() - now.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24));
+  };
+
+  // Filter markets
+  const filteredMarkets = predictionMarkets
+    .filter((market) => {
+      const matchesCategory = selectedCategory === "All" || market.category === selectedCategory;
+      const matchesSearch = market.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategoryFilter = selectedCategories.length === 0 || selectedCategories.includes(market.category);
+      
+      // Status filter
+      const matchesStatus = status === "Active" 
+        ? !market.resolved 
+        : market.resolved;
+      
+      // Frequency filter (based on time to resolution)
+      let matchesFrequency = true;
+      if (frequency !== "All") {
+        const daysUntilResolution = getDaysUntilResolution(market.endDate);
+        if (frequency === "Daily") {
+          matchesFrequency = daysUntilResolution <= 7; // Markets ending within a week
+        } else if (frequency === "Weekly") {
+          matchesFrequency = daysUntilResolution > 7 && daysUntilResolution <= 30; // Markets ending within a month
+        } else if (frequency === "Monthly") {
+          matchesFrequency = daysUntilResolution > 30; // Markets ending after a month
+        }
+      }
+      
+      return matchesCategory && matchesSearch && matchesCategoryFilter && matchesStatus && matchesFrequency;
+    })
+    // Sort markets
+    .sort((a, b) => {
+      if (sortBy === "24h Volume") {
+        return b.volumeNumeric - a.volumeNumeric; // Highest volume first
+      } else if (sortBy === "Newest") {
+        const dateA = new Date(a.createdDate);
+        const dateB = new Date(b.createdDate);
+        return dateB.getTime() - dateA.getTime(); // Newest first
+      } else if (sortBy === "Ending Soon") {
+        const dateA = new Date(a.endDate);
+        const dateB = new Date(b.endDate);
+        return dateA.getTime() - dateB.getTime(); // Soonest first
+      } else if (sortBy === "Total Volume") {
+        return b.volumeNumeric - a.volumeNumeric; // Same as 24h Volume for now
+      }
+      return 0;
+    });
 
   const trendingMarkets = predictionMarkets.filter((m) => m.trending);
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-24 lg:pb-8">
       {/* Header with Navigation */}
-      <Navigation currentPage="markets" showPortfolioBalance={true} />
+      <Navigation 
+        currentPage="markets" 
+        showPortfolioBalance={true}
+        onSignIn={() => setShowSignIn(true)}
+        onSignUp={() => setShowSignUp(true)}
+      />
 
       {/* Search and Filter Section */}
       <div className="sticky top-[57px] z-40 bg-background/90 backdrop-blur-md border-b border-border">
@@ -607,6 +772,203 @@ export default function MarketsPage() {
 
       {/* Mobile Navigation */}
       <MobileNavigation currentPage="home" />
+
+      {/* Sign In Modal */}
+      {showSignIn && (
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end sm:items-center justify-center">
+          <div className="w-full max-w-md bg-card rounded-t-3xl sm:rounded-3xl p-6 animate-slide-up border border-card-border">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold">Welcome Back</h2>
+              <button
+                onClick={() => setShowSignIn(false)}
+                className="p-2 text-muted-foreground hover:text-foreground transition"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <form className="space-y-4" onSubmit={handleSignIn}>
+              <div>
+                <label className="block text-sm font-medium text-foreground-secondary mb-2">
+                  Phone Number
+                </label>
+                <div className="flex">
+                  <span className="px-4 py-3 bg-muted border border-r-0 border-input-border rounded-l-xl text-muted-foreground">
+                    +254
+                  </span>
+                  <input
+                    type="tel"
+                    placeholder="712 345 678"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className="flex-1 px-4 py-3 bg-input border border-input-border rounded-r-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground-secondary mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 bg-primary hover:bg-primary-hover rounded-xl font-semibold text-primary-foreground transition active:scale-[0.98]"
+              >
+                Sign In
+              </button>
+
+              <button
+                type="button"
+                className="w-full py-3 text-muted-foreground hover:text-foreground text-sm transition"
+              >
+                Forgot Password?
+              </button>
+            </form>
+
+            <div className="mt-6 pt-6 border-t border-border text-center">
+              <p className="text-muted-foreground text-sm">
+                Don&apos;t have an account?{" "}
+                <button
+                  onClick={() => {
+                    setShowSignIn(false);
+                    setShowSignUp(true);
+                  }}
+                  className="text-primary font-medium hover:text-primary-light transition"
+                >
+                  Sign Up
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sign Up Modal */}
+      {showSignUp && (
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end sm:items-center justify-center">
+          <div className="w-full max-w-md bg-card rounded-t-3xl sm:rounded-3xl p-6 animate-slide-up border border-card-border">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold">Create Account</h2>
+              <button
+                onClick={() => setShowSignUp(false)}
+                className="p-2 text-muted-foreground hover:text-foreground transition"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <form className="space-y-4" onSubmit={handleSignUp}>
+              <div>
+                <label className="block text-sm font-medium text-foreground-secondary mb-2">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="John Kamau"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground-secondary mb-2">
+                  Phone Number
+                </label>
+                <div className="flex">
+                  <span className="px-4 py-3 bg-muted border border-r-0 border-input-border rounded-l-xl text-muted-foreground">
+                    +254
+                  </span>
+                  <input
+                    type="tel"
+                    placeholder="712 345 678"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className="flex-1 px-4 py-3 bg-input border border-input-border rounded-r-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground-secondary mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Create a strong password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                />
+              </div>
+
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  className="mt-1 w-4 h-4 accent-primary rounded"
+                />
+                <label htmlFor="terms" className="text-xs text-muted-foreground">
+                  I agree to the{" "}
+                  <a href="#" className="text-primary hover:text-primary-light transition">Terms of Service</a> and{" "}
+                  <a href="#" className="text-primary hover:text-primary-light transition">Privacy Policy</a>. I am at least 18 years old.
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 bg-primary hover:bg-primary-hover rounded-xl font-semibold text-primary-foreground transition active:scale-[0.98]"
+              >
+                Create Account
+              </button>
+            </form>
+
+            <div className="mt-6 pt-6 border-t border-border text-center">
+              <p className="text-muted-foreground text-sm">
+                Already have an account?{" "}
+                <button
+                  onClick={() => {
+                    setShowSignUp(false);
+                    setShowSignIn(true);
+                  }}
+                  className="text-primary font-medium hover:text-primary-light transition"
+                >
+                  Sign In
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes slide-up {
+          from {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-up {
+          animation: slide-up 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
