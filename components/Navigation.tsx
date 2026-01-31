@@ -92,6 +92,24 @@ export default function Navigation({
               >
                 About
               </Link>
+              
+              {/* Auth Buttons - Only show when not logged in */}
+              {!isLoggedIn && (
+                <>
+                  <button
+                    onClick={onSignIn}
+                    className="px-4 py-2 text-sm font-medium rounded-lg transition text-muted-foreground hover:text-foreground hover:bg-muted"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={onSignUp}
+                    className="px-4 py-2 text-sm font-medium rounded-lg transition bg-primary text-primary-foreground hover:bg-primary-hover"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )}
             </nav>
 
             {/* Auth Buttons & Portfolio Balance */}
