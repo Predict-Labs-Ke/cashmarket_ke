@@ -594,6 +594,7 @@ export default function MarketsPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const { login } = useAuth();
 
@@ -611,6 +612,10 @@ export default function MarketsPage() {
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!termsAccepted) {
+      alert("Please accept the terms and conditions to continue.");
+      return;
+    }
     const initials = name.split(' ').filter(n => n.length > 0).map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
     const avatar = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3E${initials}%3C/text%3E%3C/svg%3E`;
     login({
@@ -1059,6 +1064,8 @@ export default function MarketsPage() {
                 <input
                   type="checkbox"
                   id="terms"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
                   className="mt-1 w-4 h-4 accent-primary rounded"
                 />
                 <label htmlFor="terms" className="text-xs text-muted-foreground">
