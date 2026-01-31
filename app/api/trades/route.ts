@@ -15,7 +15,7 @@ import type { Market, User, TradeRequest, FeeConfig } from "@/lib/types";
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await requireAuth(request);
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
       return session; // Return error response
     }

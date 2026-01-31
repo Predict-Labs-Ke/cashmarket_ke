@@ -13,7 +13,7 @@ export async function POST(
 ) {
   try {
     // Check authentication - only admins and oracles can resolve markets
-    const session = await requireRole(['admin', 'oracle'], request);
+    const session = await requireRole(['admin', 'oracle']);
     if (session instanceof NextResponse) {
       return session;
     }

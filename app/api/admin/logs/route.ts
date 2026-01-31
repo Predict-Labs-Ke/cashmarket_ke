@@ -9,7 +9,7 @@ import type { AuditLog } from "@/lib/types";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAdmin(request);
+    const session = await requireAdmin();
     if (session instanceof NextResponse) {
       return session;
     }

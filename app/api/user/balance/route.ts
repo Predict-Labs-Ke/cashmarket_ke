@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import { requireAuth } from "@/lib/middleware/auth";
 import type { User } from "@/lib/types";
@@ -7,9 +7,9 @@ import type { User } from "@/lib/types";
  * GET /api/user/balance
  * Get user balance and account info
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const session = await requireAuth(request);
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
       return session;
     }

@@ -17,11 +17,10 @@ interface MarketStats {
   total_no_shares?: number;
 }
 
-interface Trade {
+interface RecentTrade {
   id: number;
   user_id: number;
-  market_id: number;
-  outcome: 'YES' | 'NO';
+  outcome: string;
   shares: number;
   cost: number;
   price_at_trade: number;
@@ -48,7 +47,7 @@ export default function MarketDetailsPage() {
 
   const [market, setMarket] = useState<MarketDetail | null>(null);
   const [stats, setStats] = useState<MarketStats | null>(null);
-  const [recentTrades, setRecentTrades] = useState<Trade[]>([]);
+  const [recentTrades, setRecentTrades] = useState<RecentTrade[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
