@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import SimulationBanner from "@/components/SimulationBanner";
 
 export const metadata: Metadata = {
   title: "CashMarket KE - Kenya's Prediction Market",
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         <AuthProvider>
+          <SimulationBanner />
           {children}
         </AuthProvider>
       </body>
