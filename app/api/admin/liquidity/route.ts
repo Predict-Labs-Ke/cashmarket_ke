@@ -7,9 +7,9 @@ import type { LiquidityPool, UpdateLiquidityRequest } from "@/lib/types";
  * GET /api/admin/liquidity
  * Get liquidity pool data (admin only)
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const session = await requireAdmin(request);
+    const session = await requireAdmin();
     if (session instanceof NextResponse) {
       return session;
     }
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await requireAdmin(request);
+    const session = await requireAdmin();
     if (session instanceof NextResponse) {
       return session;
     }

@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import type { AdminUser } from "@/lib/types";
 
@@ -14,7 +14,7 @@ export async function getSession() {
 /**
  * Require authentication for a route
  */
-export async function requireAuth(request?: NextRequest) {
+export async function requireAuth() {
   const session = await getSession();
 
   if (!session || !session.user) {
@@ -30,7 +30,7 @@ export async function requireAuth(request?: NextRequest) {
 /**
  * Require admin role for a route
  */
-export async function requireAdmin(request?: NextRequest) {
+export async function requireAdmin() {
   const session = await getSession();
 
   if (!session || !session.user) {
@@ -56,8 +56,7 @@ export async function requireAdmin(request?: NextRequest) {
  * Require specific admin role
  */
 export async function requireRole(
-  allowedRoles: ('admin' | 'moderator' | 'oracle')[],
-  request?: NextRequest
+  allowedRoles: ('admin' | 'moderator' | 'oracle')[]
 ) {
   const session = await getSession();
 
@@ -70,7 +69,7 @@ export async function requireRole(
 
   const role = session.user.role;
 
-  if (!allowedRoles.includes(role as any)) {
+  if (!allowedRoles.includes(role as 'admin' | 'moderator' | 'oracle')) {
     return NextResponse.json(
       { error: `Forbidden - One of these roles required: ${allowedRoles.join(', ')}` },
       { status: 403 }
@@ -88,7 +87,7 @@ export function logAdminAction(
   actionType: string,
   resourceType?: string,
   resourceId?: number,
-  details?: any,
+  details?: Record<string, unknown>,
   ipAddress?: string
 ): void {
   const stmt = db.prepare(`

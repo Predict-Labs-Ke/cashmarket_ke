@@ -62,7 +62,7 @@ export default function AccuracyPage() {
             <h1 className="text-3xl font-bold">Platform Accuracy</h1>
           </div>
           <p className="text-muted-foreground">
-            How accurate are CashMarket predictions? Explore our platform's forecasting performance.
+            How accurate are CashMarket predictions? Explore our platform&apos;s forecasting performance.
           </p>
         </div>
 
@@ -102,7 +102,7 @@ export default function AccuracyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold mb-4">Accuracy Prior to Resolution</h2>
               <p className="text-muted-foreground mb-4">
-                Market probabilities become more accurate as resolution approaches. Here's how accurate 
+                Market probabilities become more accurate as resolution approaches. Here&apos;s how accurate 
                 the final leading outcome was at various time intervals before resolution.
               </p>
               
@@ -123,7 +123,7 @@ export default function AccuracyPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {accuracyBeforeResolution.map((item, idx) => (
+                      {accuracyBeforeResolution.map((item) => (
                         <tr
                           key={item.interval}
                           className="border-b border-border last:border-b-0 hover:bg-card-hover transition"
@@ -217,7 +217,7 @@ export default function AccuracyPage() {
               
               <div className="bg-card border border-card-border rounded-2xl p-6">
                 <div className="space-y-4">
-                  {brierScoreData.map((item, idx) => {
+                  {brierScoreData.map((item) => {
                     const maxScore = 0.25;
                     const scorePercentage = (item.brierScore / maxScore) * 100;
                     
@@ -323,7 +323,7 @@ export default function AccuracyPage() {
                   <p className="text-muted-foreground text-sm">
                     Accuracy reflects whether the final leading outcome (the option with the highest 
                     probability at each snapshot) matches the actual resolution. For example, if a market 
-                    showed 65% "Yes" four hours before resolution and resolved to "Yes", this contributes 
+                    showed 65% &quot;Yes&quot; four hours before resolution and resolved to &quot;Yes&quot;, this contributes 
                     to the accuracy percentage for that time interval.
                   </p>
                 </div>
@@ -360,7 +360,7 @@ export default function AccuracyPage() {
                 <h3 className="font-semibold text-lg mb-2">Data Attribution</h3>
                 <p className="text-muted-foreground text-sm mb-3">
                   The methodology and presentation of accuracy metrics on this page are inspired by 
-                  Alex McCullough's excellent work analyzing prediction market accuracy:
+                  Alex McCullough&apos;s excellent work analyzing prediction market accuracy:
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
@@ -397,20 +397,20 @@ export default function AccuracyPage() {
             <div className="bg-card border border-card-border rounded-2xl overflow-hidden">
               <details className="group">
                 <summary className="px-6 py-4 cursor-pointer hover:bg-card-hover transition flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">What does "accuracy" mean here?</h3>
+                  <h3 className="font-semibold text-lg">What does &quot;accuracy&quot; mean here?</h3>
                   <svg className="w-5 h-5 text-muted-foreground transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
                 <div className="px-6 pb-4 text-muted-foreground">
                   <p className="mb-3">
-                    Accuracy measures whether the market's leading prediction (the outcome with the highest 
+                    Accuracy measures whether the market&apos;s leading prediction (the outcome with the highest 
                     probability) at a given time matched the actual resolution. For example, if a market 
-                    showed 65% "Yes" and 35% "No" four hours before resolution, and it resolved "Yes", 
-                    that's counted as accurate.
+                    showed 65% &quot;Yes&quot; and 35% &quot;No&quot; four hours before resolution, and it resolved &quot;Yes&quot;, 
+                    that&apos;s counted as accurate.
                   </p>
                   <p>
-                    It's important to note that accuracy is a simple binary measure—it only considers 
+                    It&apos;s important to note that accuracy is a simple binary measure—it only considers 
                     whether the most likely outcome was correct, not how confident the market was in 
                     that prediction. For a more nuanced view of prediction quality, see the Brier score.
                   </p>
@@ -421,7 +421,7 @@ export default function AccuracyPage() {
             <div className="bg-card border border-card-border rounded-2xl overflow-hidden">
               <details className="group">
                 <summary className="px-6 py-4 cursor-pointer hover:bg-card-hover transition flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">What is a "Brier score"?</h3>
+                  <h3 className="font-semibold text-lg">What is a &quot;Brier score&quot;?</h3>
                   <svg className="w-5 h-5 text-muted-foreground transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -434,13 +434,13 @@ export default function AccuracyPage() {
                   </p>
                   <p className="mb-3">
                     The score ranges from 0.00 (perfect prediction) to 1.00 (worst possible prediction). 
-                    It's calculated as the average squared difference between predicted probabilities and 
+                    It&apos;s calculated as the average squared difference between predicted probabilities and 
                     actual outcomes across all markets.
                   </p>
                   <p>
                     For example, predicting 90% for an event that happens gives a better Brier score than 
-                    predicting 60%, even though both are "correct". Similarly, predicting 90% for an event 
-                    that doesn't happen is penalized more heavily than predicting 60%.
+                    predicting 60%, even though both are &quot;correct&quot;. Similarly, predicting 90% for an event 
+                    that doesn&apos;t happen is penalized more heavily than predicting 60%.
                   </p>
                 </div>
               </details>
@@ -462,7 +462,7 @@ export default function AccuracyPage() {
                   </p>
                   <p className="mb-3">
                     For example, a market about whether a sports team will win a championship might start 
-                    at 40% probability at the beginning of the season. As games are played and the team's 
+                    at 40% probability at the beginning of the season. As games are played and the team&apos;s 
                     performance becomes clearer, the probability will shift to better reflect the likely 
                     outcome.
                   </p>
@@ -477,26 +477,26 @@ export default function AccuracyPage() {
             <div className="bg-card border border-card-border rounded-2xl overflow-hidden">
               <details className="group">
                 <summary className="px-6 py-4 cursor-pointer hover:bg-card-hover transition flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">Why do more markets resolve "No" than "Yes"?</h3>
+                  <h3 className="font-semibold text-lg">Why do more markets resolve &quot;No&quot; than &quot;Yes&quot;?</h3>
                   <svg className="w-5 h-5 text-muted-foreground transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
                 <div className="px-6 pb-4 text-muted-foreground">
                   <p className="mb-3">
-                    The skew toward "No" resolutions is primarily due to how markets are structured. 
+                    The skew toward &quot;No&quot; resolutions is primarily due to how markets are structured. 
                     Many markets are framed around specific, narrow events that may or may not happen, 
-                    such as "Will X reach Y by date Z?" or "Will event A occur before date B?"
+                    such as &quot;Will X reach Y by date Z?&quot; or &quot;Will event A occur before date B?&quot;
                   </p>
                   <p className="mb-3">
                     These types of questions naturally have a higher baseline probability of resolving 
-                    "No" because they require specific conditions to be met for a "Yes" resolution. 
-                    If any of those conditions fail to materialize, the market resolves "No".
+                    &quot;No&quot; because they require specific conditions to be met for a &quot;Yes&quot; resolution. 
+                    If any of those conditions fail to materialize, the market resolves &quot;No&quot;.
                   </p>
                   <p>
-                    Additionally, markets about negative events (e.g., "Will this NOT happen?") or 
-                    ambitious targets (e.g., "Will this record be broken?") tend to favor "No" outcomes. 
-                    This isn't a flaw—it reflects the real-world probability distribution of these events.
+                    Additionally, markets about negative events (e.g., &quot;Will this NOT happen?&quot;) or 
+                    ambitious targets (e.g., &quot;Will this record be broken?&quot;) tend to favor &quot;No&quot; outcomes. 
+                    This isn&apos;t a flaw—it reflects the real-world probability distribution of these events.
                   </p>
                 </div>
               </details>
@@ -517,12 +517,12 @@ export default function AccuracyPage() {
                   </p>
                   <p className="mb-3">
                     Price snapshots are automatically captured at specific intervals (1 month, 1 week, 
-                    1 day, 12 hours, and 4 hours) before each market's resolution. These snapshots are 
+                    1 day, 12 hours, and 4 hours) before each market&apos;s resolution. These snapshots are 
                     then compared against the actual outcomes to compute the various metrics you see here.
                   </p>
                   <p>
-                    The methodology for presenting this data is inspired by Alex McCullough's excellent 
-                    Dune dashboards analyzing Polymarket accuracy. We've adapted these proven analytical 
+                    The methodology for presenting this data is inspired by Alex McCullough&apos;s excellent 
+                    Dune dashboards analyzing Polymarket accuracy. We&apos;ve adapted these proven analytical 
                     approaches to provide transparency into how well CashMarket predictions perform.
                   </p>
                 </div>

@@ -10,7 +10,7 @@ import type { DepositRequest, User } from "@/lib/types";
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await requireAuth(request);
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
       return session;
     }

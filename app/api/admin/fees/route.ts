@@ -9,7 +9,7 @@ import type { UpdateFeesRequest, FeeConfig } from "@/lib/types";
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await requireAdmin(request);
+    const session = await requireAdmin();
     if (session instanceof NextResponse) {
       return session;
     }

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     `;
 
     const conditions: string[] = [];
-    const params: any[] = [];
+    const params: (string | number)[] = [];
 
     if (status) {
       conditions.push('m.status = ?');

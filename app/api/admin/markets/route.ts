@@ -11,7 +11,7 @@ import type { CreateMarketRequest } from "@/lib/types";
 export async function POST(request: NextRequest) {
   try {
     // Check admin authentication
-    const session = await requireAdmin(request);
+    const session = await requireAdmin();
     if (session instanceof NextResponse) {
       return session; // Return error response
     }

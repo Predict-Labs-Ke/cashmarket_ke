@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getMarkets, getMarket, type Market, type MarketDetail } from '../api/client';
 
 /**
@@ -14,6 +14,19 @@ export function useMarkets(params?: {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Memoize params to avoid unnecessary re-renders
+  const memoizedParams = useMemo(() => ({
+    status: params?.status,
+    category: params?.category,
+    limit: params?.limit,
+    offset: params?.offset,
+  }), [
+    params?.status,
+    params?.category,
+    params?.limit,
+    params?.offset,
+  ]);
+
   useEffect(() => {
     let mounted = true;
 
@@ -21,7 +34,7 @@ export function useMarkets(params?: {
       try {
         setLoading(true);
         setError(null);
-        const data = await getMarkets(params);
+        const data = await getMarkets(memoizedParams);
         if (mounted) {
           setMarkets(data.markets);
         }
@@ -41,7 +54,7 @@ export function useMarkets(params?: {
     return () => {
       mounted = false;
     };
-  }, [params?.status, params?.category, params?.limit, params?.offset]);
+  }, [memoizedParams]);
 
   return { markets, loading, error };
 }
@@ -51,7 +64,11 @@ export function useMarkets(params?: {
  */
 export function useMarket(marketId: number | null) {
   const [market, setMarket] = useState<MarketDetail | null>(null);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<{
+    participant_count: number;
+    trade_count: number;
+    total_volume: number;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

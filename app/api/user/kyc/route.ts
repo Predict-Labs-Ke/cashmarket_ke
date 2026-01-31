@@ -8,7 +8,7 @@ import { submitKYC, getKYCStatus } from "@/lib/security/kyc";
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await requireAuth(request);
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
       return session;
     }
@@ -45,9 +45,9 @@ export async function POST(request: NextRequest) {
  * GET /api/user/kyc
  * Get KYC status
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const session = await requireAuth(request);
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
       return session;
     }
