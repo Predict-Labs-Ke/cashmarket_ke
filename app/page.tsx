@@ -47,7 +47,7 @@ export default function Home() {
     e.preventDefault();
     // In a real app, this would create a new user account
     // For demo purposes, we'll create a mock user session
-    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+    const initials = name.split(' ').filter(n => n.length > 0).map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
     const avatar = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect fill='%2322c55e' width='40' height='40'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='white'%3E${initials}%3C/text%3E%3C/svg%3E`;
     login({
       name: name || "User",
