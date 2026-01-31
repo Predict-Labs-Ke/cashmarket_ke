@@ -15,8 +15,12 @@ export function useMarkets(params?: {
   const [error, setError] = useState<string | null>(null);
 
   // Memoize params to avoid unnecessary re-renders
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedParams = useMemo(() => params, [
+  const memoizedParams = useMemo(() => ({
+    status: params?.status,
+    category: params?.category,
+    limit: params?.limit,
+    offset: params?.offset,
+  }), [
     params?.status,
     params?.category,
     params?.limit,

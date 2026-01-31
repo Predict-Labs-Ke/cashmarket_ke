@@ -80,8 +80,8 @@ export default function MarketDetailsPage() {
       
       history.push({
         time: `T-${points - i}`,
-        yes: parseFloat((price * 100).toFixed(1)),
-        no: parseFloat(((1 - price) * 100).toFixed(1)),
+        YES: parseFloat((price * 100).toFixed(1)),
+        NO: parseFloat(((1 - price) * 100).toFixed(1)),
       });
     }
     
