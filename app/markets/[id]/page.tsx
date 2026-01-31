@@ -510,7 +510,7 @@ export default function MarketDetailsPage() {
                   {tradePreview && !previewLoading && (
                     <div className="mb-4 p-4 bg-muted rounded-xl space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Shares you'll receive:</span>
+                        <span className="text-muted-foreground">Shares you&apos;ll receive:</span>
                         <span className="font-medium">{tradePreview.shares.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-sm">
