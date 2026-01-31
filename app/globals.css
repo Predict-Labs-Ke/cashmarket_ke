@@ -63,8 +63,8 @@
   --radius-full: 9999px;
 }
 
-/* Dark mode - default for this app */
-.dark, :root {
+/* Dark mode */
+.dark {
   --background: #0a0a0a;
   --background-secondary: #171717;
   --background-tertiary: #262626;
