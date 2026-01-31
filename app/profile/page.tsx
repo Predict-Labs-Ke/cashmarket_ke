@@ -250,6 +250,7 @@ export default function ProfilePage() {
             </div>
             <div className="text-3xl font-bold text-success mb-1">{animatedStats.accuracy}%</div>
             <div className="text-sm text-muted-foreground">Accuracy</div>
+            <div className="text-xs text-muted-foreground mt-1 italic">based on resolved markets only</div>
           </div>
 
           <div className="bg-card border border-card-border rounded-2xl p-5 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 group">
