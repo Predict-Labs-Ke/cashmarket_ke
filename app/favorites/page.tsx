@@ -146,13 +146,18 @@ export default function FavoritesPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    try {
-      const favorites = JSON.parse(localStorage.getItem("favoriteMarkets") || "[]");
-      setFavoriteIds(favorites);
-    } catch {
-      setFavoriteIds([]);
-    }
+    // Mark as mounted and load favorites
+    const loadFavorites = () => {
+      setMounted(true);
+      try {
+        const favorites = JSON.parse(localStorage.getItem("favoriteMarkets") || "[]");
+        setFavoriteIds(favorites);
+      } catch {
+        setFavoriteIds([]);
+      }
+    };
+    
+    loadFavorites();
 
     // Listen for storage changes to update favorites in real-time
     const handleStorageChange = () => {
@@ -243,7 +248,7 @@ export default function FavoritesPage() {
       </main>
 
       {/* Mobile Navigation */}
-      <MobileNavigation currentPage="favorites" />
+      <MobileNavigation currentPage="home" />
     </div>
   );
 }
