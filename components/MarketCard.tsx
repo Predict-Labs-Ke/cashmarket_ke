@@ -97,8 +97,12 @@ export default function MarketCard({
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining(endDate));
   const [isFavorite, setIsFavorite] = useState(() => {
     if (typeof window === 'undefined') return false;
-    const favorites = JSON.parse(localStorage.getItem("favoriteMarkets") || "[]");
-    return favorites.includes(id);
+    try {
+      const favorites = JSON.parse(localStorage.getItem("favoriteMarkets") || "[]");
+      return favorites.includes(id);
+    } catch {
+      return false;
+    }
   });
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -116,15 +120,20 @@ export default function MarketCard({
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const favorites = JSON.parse(localStorage.getItem("favoriteMarkets") || "[]");
-    let newFavorites;
-    if (isFavorite) {
-      newFavorites = favorites.filter((fav: number) => fav !== id);
-    } else {
-      newFavorites = [...favorites, id];
+    try {
+      const favorites = JSON.parse(localStorage.getItem("favoriteMarkets") || "[]");
+      let newFavorites;
+      if (isFavorite) {
+        newFavorites = favorites.filter((fav: number) => fav !== id);
+      } else {
+        newFavorites = [...favorites, id];
+      }
+      localStorage.setItem("favoriteMarkets", JSON.stringify(newFavorites));
+      setIsFavorite(!isFavorite);
+    } catch {
+      // Handle corrupted localStorage gracefully
+      console.error("Failed to update favorites");
     }
-    localStorage.setItem("favoriteMarkets", JSON.stringify(newFavorites));
-    setIsFavorite(!isFavorite);
   };
 
   return (
@@ -198,7 +207,11 @@ export default function MarketCard({
             </svg>
           </button>
           {showTooltip && (
-            <div className="absolute right-0 top-6 z-10 w-64 p-3 bg-background border border-card-border rounded-lg shadow-xl text-xs text-muted-foreground">
+            <div 
+              role="tooltip" 
+              aria-live="polite"
+              className="absolute right-0 top-6 z-10 w-64 p-3 bg-background border border-card-border rounded-lg shadow-xl text-xs text-muted-foreground"
+            >
               This market aggregates public belief to estimate real-world probabilities
             </div>
           )}
