@@ -1,7 +1,6 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 interface AuthContextType {
@@ -19,38 +18,71 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Mock user for demo purposes
+const MOCK_USER = {
+  name: "Demo User",
+  email: "demo@cashmarket.ke",
+  avatar: undefined,
+  role: "user",
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<typeof MOCK_USER | null>(null);
+  const [status, setStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
   const router = useRouter();
 
-  const login = async (email: string, password: string, userType: string = 'user') => {
-    const result = await signIn('credentials', {
-      email,
-      password,
-      userType,
-      redirect: false,
-    });
+  // Check for existing session on mount
+  useEffect(() => {
+    const savedAuth = localStorage.getItem("cashmarket_auth");
+    if (savedAuth) {
+      try {
+        const authData = JSON.parse(savedAuth);
+        setUser(authData.user);
+        setIsLoggedIn(true);
+        setStatus("authenticated");
+      } catch {
+        setStatus("unauthenticated");
+      }
+    } else {
+      setStatus("unauthenticated");
+    }
+  }, []);
 
-    if (result?.error) {
-      throw new Error(result.error);
+  const login = async (email: string, password: string, userType: string = 'user') => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Simple mock authentication - accepts any email/password
+    if (email && password) {
+      const userData = {
+        ...MOCK_USER,
+        email: email,
+        role: userType,
+      };
+      
+      setUser(userData);
+      setIsLoggedIn(true);
+      setStatus("authenticated");
+      
+      // Save to localStorage
+      localStorage.setItem("cashmarket_auth", JSON.stringify({ user: userData }));
+    } else {
+      throw new Error("Email and password are required");
     }
   };
 
   const logout = async () => {
-    await signOut({ redirect: false });
+    setUser(null);
+    setIsLoggedIn(false);
+    setStatus("unauthenticated");
+    localStorage.removeItem("cashmarket_auth");
     router.push("/");
   };
 
-  const user = session?.user ? {
-    name: session.user.name || '',
-    email: session.user.email || '',
-    avatar: session.user.image || undefined,
-    role: (session.user as { role?: string }).role || 'user',
-  } : null;
-
   return (
     <AuthContext.Provider value={{ 
-      isLoggedIn: status === "authenticated", 
+      isLoggedIn, 
       user, 
       login, 
       logout,

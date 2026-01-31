@@ -1,34 +1,23 @@
 /**
- * API Client for CashMarket
- * Provides typed functions for all backend API endpoints
+ * API Client for CashMarket (Frontend-Only Version)
+ * Uses mock data instead of backend API calls
  */
 
-// Base configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
+import { 
+  MOCK_MARKETS, 
+  MOCK_USER, 
+  MOCK_PORTFOLIO, 
+  MOCK_TRANSACTIONS, 
+  MOCK_RECENT_TRADES,
+  getMockMarketById,
+  filterMockMarkets
+} from '../data/mockData';
 
 /**
- * Generic fetch wrapper with error handling
+ * Simulate network delay for realistic feel
  */
-async function apiFetch<T>(
-  endpoint: string,
-  options?: RequestInit
-): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
-  
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Request failed' }));
-    throw new Error(error.error || `HTTP ${response.status}`);
-  }
-
-  return response.json();
+async function simulateDelay(ms: number = 300): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // ==================== Public Market APIs ====================
@@ -80,16 +69,16 @@ export async function getMarkets(params?: {
   limit?: number;
   offset?: number;
 }): Promise<MarketsResponse> {
-  const searchParams = new URLSearchParams();
-  if (params?.status) searchParams.set('status', params.status);
-  if (params?.category) searchParams.set('category', params.category);
-  if (params?.limit) searchParams.set('limit', params.limit.toString());
-  if (params?.offset) searchParams.set('offset', params.offset.toString());
-
-  const query = searchParams.toString();
-  return apiFetch<MarketsResponse>(
-    `/api/markets${query ? `?${query}` : ''}`
-  );
+  await simulateDelay();
+  
+  const markets = filterMockMarkets(params);
+  
+  return {
+    markets,
+    total: MOCK_MARKETS.length,
+    limit: params?.limit || MOCK_MARKETS.length,
+    offset: params?.offset || 0,
+  };
 }
 
 /**
@@ -117,7 +106,27 @@ export async function getMarket(marketId: number): Promise<{
     total_invested: number;
   };
 }> {
-  return apiFetch(`/api/markets/${marketId}`);
+  await simulateDelay();
+  
+  const market = getMockMarketById(marketId);
+  if (!market) {
+    throw new Error('Market not found');
+  }
+
+  return {
+    market,
+    stats: {
+      participant_count: market.participant_count,
+      trade_count: market.trade_count,
+      total_volume: market.total_volume,
+    },
+    recent_trades: MOCK_RECENT_TRADES,
+    user_position: {
+      yes_shares: 0,
+      no_shares: 0,
+      total_invested: 0,
+    },
+  };
 }
 
 /**
@@ -137,10 +146,23 @@ export async function calculateStake(data: {
   roi_percentage: number;
   fee: number;
 }> {
-  return apiFetch('/api/stake', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  await simulateDelay();
+  
+  // Simple mock calculation
+  const fee = data.stake * 0.02; // 2% fee
+  const cost = data.stake;
+  const shares = data.stake / 50; // Simplified share calculation
+  
+  return {
+    cost,
+    shares,
+    new_price_yes: 0.52,
+    new_price_no: 0.48,
+    potential_payout: data.stake * 2,
+    expected_return: data.stake,
+    roi_percentage: 100,
+    fee,
+  };
 }
 
 /**
@@ -158,10 +180,19 @@ export async function executeTrade(data: {
   fee: number;
   new_balance: number;
 }> {
-  return apiFetch('/api/trades', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  await simulateDelay(500);
+  
+  const fee = data.stake * 0.02;
+  const shares = data.stake / 50;
+  
+  return {
+    success: true,
+    trade_id: Math.floor(Math.random() * 10000),
+    shares,
+    cost: data.stake,
+    fee,
+    new_balance: MOCK_USER.balance - data.stake,
+  };
 }
 
 /**
@@ -188,7 +219,13 @@ export async function getUserBalance(): Promise<{
     created_at: string;
   }[];
 }> {
-  return apiFetch('/api/user/balance');
+  await simulateDelay();
+  
+  return {
+    user: MOCK_USER,
+    portfolio: MOCK_PORTFOLIO,
+    recent_transactions: MOCK_TRANSACTIONS,
+  };
 }
 
 /**
@@ -200,10 +237,14 @@ export async function sendOTP(purpose: 'deposit' | 'withdrawal' | 'login'): Prom
   _test_code?: string;
   expires_at: string;
 }> {
-  return apiFetch('/api/user/otp/send', {
-    method: 'POST',
-    body: JSON.stringify({ purpose }),
-  });
+  await simulateDelay();
+  
+  return {
+    success: true,
+    message: 'OTP sent successfully (mock)',
+    _test_code: '123456',
+    expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+  };
 }
 
 /**
@@ -218,10 +259,14 @@ export async function deposit(data: {
   amount: number;
   new_balance: number;
 }> {
-  return apiFetch('/api/user/deposit', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  await simulateDelay(500);
+  
+  return {
+    success: true,
+    transaction_id: Math.floor(Math.random() * 10000),
+    amount: data.amount,
+    new_balance: MOCK_USER.balance + data.amount,
+  };
 }
 
 /**
@@ -237,8 +282,15 @@ export async function withdraw(data: {
   fee: number;
   new_balance: number;
 }> {
-  return apiFetch('/api/user/withdraw', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  await simulateDelay(500);
+  
+  const fee = data.amount * 0.01; // 1% withdrawal fee
+  
+  return {
+    success: true,
+    transaction_id: Math.floor(Math.random() * 10000),
+    amount: data.amount,
+    fee,
+    new_balance: MOCK_USER.balance - data.amount - fee,
+  };
 }
