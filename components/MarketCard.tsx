@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import BuyModal from "./BuyModal";
 
 interface MarketCardProps {
@@ -95,6 +96,7 @@ export default function MarketCard({
   resolved = false,
   createdDate,
 }: MarketCardProps) {
+  const router = useRouter();
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining(endDate));
   const [isFavorite, setIsFavorite] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -146,8 +148,16 @@ export default function MarketCard({
     setShowBuyModal(true);
   };
 
+  // Handle card click to navigate to details page
+  const handleCardClick = () => {
+    router.push(`/markets/${id}`);
+  };
+
   return (
-    <div className="bg-card border border-card-border rounded-2xl p-4 lg:p-5 hover:bg-card-hover hover:border-border-secondary transition cursor-pointer group">
+    <div 
+      onClick={handleCardClick}
+      className="bg-card border border-card-border rounded-2xl p-4 lg:p-5 hover:bg-card-hover hover:border-border-secondary transition cursor-pointer group"
+    >
       {/* Header with Category Badge, Maturity Status, and Trending */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-2 flex-wrap">
