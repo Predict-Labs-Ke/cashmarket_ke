@@ -95,14 +95,12 @@ export default function MarketCard({
   createdDate,
 }: MarketCardProps) {
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining(endDate));
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  // Load favorite status from localStorage
-  useEffect(() => {
+  const [isFavorite, setIsFavorite] = useState(() => {
+    if (typeof window === 'undefined') return false;
     const favorites = JSON.parse(localStorage.getItem("favoriteMarkets") || "[]");
-    setIsFavorite(favorites.includes(id));
-  }, [id]);
+    return favorites.includes(id);
+  });
+  const [showTooltip, setShowTooltip] = useState(false);
 
   // Update countdown every minute
   useEffect(() => {
