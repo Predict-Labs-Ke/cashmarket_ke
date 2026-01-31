@@ -155,11 +155,35 @@ const categories = [
 export default function MarketsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState("24h Volume");
+  const [frequency, setFrequency] = useState("All");
+  const [status, setStatus] = useState("Active");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const hasActiveFilters = sortBy !== "24h Volume" || frequency !== "All" || status !== "Active" || selectedCategories.length > 0;
+
+  const handleClearFilters = () => {
+    setSortBy("24h Volume");
+    setFrequency("All");
+    setStatus("Active");
+    setSelectedCategories([]);
+  };
+
+  const toggleCategoryFilter = (category: string) => {
+    setSelectedCategories(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
 
   const filteredMarkets = predictionMarkets.filter((market) => {
     const matchesCategory = selectedCategory === "All" || market.category === selectedCategory;
     const matchesSearch = market.title.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    const matchesCategoryFilter = selectedCategories.length === 0 || selectedCategories.includes(market.category);
+    const matchesStatus = status === "Active"; // All current markets are active
+    return matchesCategory && matchesSearch && matchesCategoryFilter && matchesStatus;
   });
 
   const trendingMarkets = predictionMarkets.filter((m) => m.trending);
@@ -172,24 +196,125 @@ export default function MarketsPage() {
       {/* Search and Filter Section */}
       <div className="sticky top-[57px] z-40 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3">
-          {/* Search Bar */}
+          {/* Search Bar with Filter Icon */}
           <div className="mb-3">
-            <div className="relative max-w-md">
-              <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="relative max-w-md flex gap-2">
+              <div className="relative flex-1">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search markets..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                />
+              </div>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`p-2.5 rounded-xl border transition ${
+                  showFilters || hasActiveFilters
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card text-muted-foreground border-card-border hover:bg-card-hover"
+                }`}
+                aria-label="Toggle filters"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search markets..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-              />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Filters Panel with Animation */}
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              showFilters ? "max-h-96 opacity-100 mb-3" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="bg-card border border-card-border rounded-xl p-4 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Sort By */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">Sort By</label>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full px-3 py-2 bg-input border border-input-border rounded-lg text-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                  >
+                    <option>24h Volume</option>
+                    <option>Newest</option>
+                    <option>Ending Soon</option>
+                    <option>Total Volume</option>
+                  </select>
+                </div>
+
+                {/* Frequency */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">Frequency</label>
+                  <select
+                    value={frequency}
+                    onChange={(e) => setFrequency(e.target.value)}
+                    className="w-full px-3 py-2 bg-input border border-input-border rounded-lg text-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                  >
+                    <option>All</option>
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                  </select>
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">Status</label>
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="w-full px-3 py-2 bg-input border border-input-border rounded-lg text-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
+                  >
+                    <option>Active</option>
+                    <option>Resolved</option>
+                  </select>
+                </div>
+
+                {/* Clear Filters Button */}
+                <div className="flex items-end">
+                  {hasActiveFilters && (
+                    <button
+                      onClick={handleClearFilters}
+                      className="w-full px-4 py-2 bg-destructive-muted text-destructive border border-destructive/50 rounded-lg font-medium hover:bg-destructive/20 transition"
+                    >
+                      Clear Filters
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Categories Filter */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Filter by Categories</label>
+                <div className="flex flex-wrap gap-2">
+                  {categories.filter(c => c !== "All").map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => toggleCategoryFilter(cat)}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+                        selectedCategories.includes(cat)
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground hover:bg-card-hover border border-border"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
