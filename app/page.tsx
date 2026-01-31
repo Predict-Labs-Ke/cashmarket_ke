@@ -92,6 +92,11 @@ export default function Home() {
                   Earn.
                 </h1>
 
+                {/* Subtitle */}
+                <p className="text-sm lg:text-base text-primary/80 font-medium mb-4">
+                  A probability market, not a betting platform
+                </p>
+
                 <p className="text-muted-foreground text-lg lg:text-xl mb-8 leading-relaxed max-w-xl">
                   Turn your knowledge into earnings. Trade on sports, politics, economy & more with M-Pesa.
                 </p>
@@ -252,6 +257,31 @@ export default function Home() {
         {/* Footer */}
         <footer className="px-4 lg:px-8 py-6 border-t border-border">
           <div className="max-w-7xl mx-auto">
+            {/* Credibility Strip */}
+            <div className="mb-6 p-4 bg-card border border-card-border rounded-2xl">
+              <h3 className="text-sm font-semibold mb-3 text-center lg:text-left">Why Trust CashMarket KE</h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-muted-foreground">Uses publicly verifiable data</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-muted-foreground">No odds manipulation</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-muted-foreground">Outcomes resolved transparently</span>
+                </div>
+              </div>
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
               <p className="text-muted-foreground text-xs lg:text-sm">
                 © 2026 CashMarket KE. Trade responsibly.
