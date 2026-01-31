@@ -7,16 +7,9 @@ import { getUserBalance } from '@/lib/api/client';
 
 interface PortfolioData {
   balance: number;
-  portfolio_value: number;
-  total_value: number;
-  positions: Array<{
-    market_id: number;
-    market_question: string;
-    yes_shares: number;
-    no_shares: number;
-    total_invested: number;
-    current_value: number;
-  }>;
+  total_invested: number;
+  active_positions: number;
+  total_shares: number;
 }
 
 export function useUserBalance() {
@@ -31,9 +24,9 @@ export function useUserBalance() {
       const result = await getUserBalance();
       setData({
         balance: result.user.balance,
-        portfolio_value: result.portfolio.total_portfolio_value,
-        total_value: result.portfolio.total_value,
-        positions: result.portfolio.positions,
+        total_invested: result.portfolio.total_invested || 0,
+        active_positions: result.portfolio.active_positions || 0,
+        total_shares: result.portfolio.total_shares || 0,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch balance');

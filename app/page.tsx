@@ -43,9 +43,10 @@ export default function Home() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    // For now, sign up is still a mock - this would need a registration API
-    // This is a minimal change approach - full signup implementation would be a larger task
-    alert('Sign up functionality requires a registration API endpoint. Please use test credentials: john@test.com / user123');
+    // Sign up functionality requires a registration API endpoint
+    // For testing, use existing credentials from database (seeded users)
+    setShowSignUp(false);
+    setShowSignIn(true);
   };
 
   return (

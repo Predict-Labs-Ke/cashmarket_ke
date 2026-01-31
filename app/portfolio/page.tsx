@@ -58,7 +58,7 @@ export default function PortfolioPage() {
         {/* Portfolio Cards */}
         {data && !loading && (
           <div className="space-y-4">
-            {/* Portfolio Balance Card */}
+            {/* Total Value Card */}
             <div className="bg-card border border-card-border rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -69,16 +69,16 @@ export default function PortfolioPage() {
                     <h2 className="text-lg font-semibold text-foreground">Total Value</h2>
                   </div>
                   <p className="text-4xl font-bold text-primary mb-2">
-                    KES {data.total_value.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    KES {(data.balance + data.total_invested).toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Total value of your positions and available cash
+                    Available cash + invested in positions
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Cash Deposit Card */}
+            {/* Available Balance Card */}
             <div className="bg-card border border-card-border rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -98,23 +98,28 @@ export default function PortfolioPage() {
               </div>
             </div>
 
-            {/* Portfolio Value Card */}
-            <div className="bg-card border border-card-border rounded-2xl p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <svg className="w-5 h-5 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    <h2 className="text-lg font-semibold text-foreground">Portfolio Value</h2>
-                  </div>
-                  <p className="text-4xl font-bold text-foreground mb-2">
-                    KES {data.portfolio_value.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Current value of your market positions
-                  </p>
+            {/* Portfolio Stats Cards */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-card border border-card-border rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <h3 className="text-sm font-semibold">Active Positions</h3>
                 </div>
+                <p className="text-2xl font-bold">{data.active_positions}</p>
+              </div>
+
+              <div className="bg-card border border-card-border rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h3 className="text-sm font-semibold">Total Invested</h3>
+                </div>
+                <p className="text-2xl font-bold">
+                  KES {data.total_invested.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
               </div>
             </div>
 
@@ -134,59 +139,23 @@ export default function PortfolioPage() {
               </button>
             </div>
 
-            {/* Positions */}
-            {data.positions.length > 0 && (
-              <div className="mt-6">
-                <h2 className="text-xl font-bold mb-4">Your Positions</h2>
-                <div className="space-y-3">
-                  {data.positions.map((position) => (
-                    <div key={position.market_id} className="bg-card border border-card-border rounded-xl p-4">
-                      <p className="font-medium mb-2">{position.market_question}</p>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <p className="text-muted-foreground">YES Shares</p>
-                          <p className="font-semibold">{position.yes_shares.toFixed(2)}</p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground">NO Shares</p>
-                          <p className="font-semibold">{position.no_shares.toFixed(2)}</p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground">Invested</p>
-                          <p className="font-semibold">KES {position.total_invested.toFixed(2)}</p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground">Current Value</p>
-                          <p className="font-semibold">KES {position.current_value.toFixed(2)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </main>
-
-      {/* Mobile Navigation */}
-      <MobileNavigation currentPage="portfolio" />
-    </div>
-  );
-}
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
-            <div className="bg-card border border-card-border rounded-2xl p-6 text-center">
-              <svg className="w-12 h-12 mx-auto mb-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <p className="text-muted-foreground text-sm">No recent activity</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Your transactions will appear here
-              </p>
+            {/* Quick Actions */}
+            <div className="grid grid-cols-2 gap-4 mt-6">
+              <button className="bg-primary text-primary-foreground rounded-2xl p-4 font-semibold hover:bg-primary-hover transition active:scale-[0.98]">
+                <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Deposit
+              </button>
+              <button className="bg-card border border-card-border text-foreground rounded-2xl p-4 font-semibold hover:bg-card-hover transition active:scale-[0.98]">
+                <svg className="w-6 h-6 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                </svg>
+                Withdraw
+              </button>
             </div>
           </div>
-        </div>
+        )}
       </main>
 
       {/* Mobile Navigation */}
