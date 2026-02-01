@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MobileNavigationProps {
   currentPage?: "home" | "search" | "breaking" | "portfolio" | "profile";
 }
 
 export default function MobileNavigation({ currentPage = "home" }: MobileNavigationProps) {
+  const { isLoggedIn } = useAuth();
+
+  // Don't render mobile navigation for non-logged-in users
+  if (!isLoggedIn) {
+    return null;
+  }
+
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border px-6 py-3 z-50">
       <div className="flex items-center justify-around max-w-md mx-auto">
