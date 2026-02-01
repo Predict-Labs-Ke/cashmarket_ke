@@ -40,59 +40,61 @@ export default function Navigation({
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1">
-              <Link
-                href="/markets"
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-                  currentPage === "markets"
-                    ? "text-primary bg-primary-muted"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Markets
-              </Link>
-              <Link
-                href="/breaking"
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-                  currentPage === "breaking"
-                    ? "text-primary bg-primary-muted"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Breaking
-              </Link>
-              <Link
-                href="/trending"
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-                  currentPage === "trending"
-                    ? "text-primary bg-primary-muted"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Trending
-              </Link>
-              <Link
-                href="/leaderboard"
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-                  currentPage === "leaderboard"
-                    ? "text-primary bg-primary-muted"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                Leaderboard
-              </Link>
-              <Link
-                href="/about"
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-                  currentPage === "about"
-                    ? "text-primary bg-primary-muted"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                About
-              </Link>
-            </nav>
+            {/* Desktop Navigation - Only show when logged in */}
+            {isLoggedIn && (
+              <nav className="hidden md:flex items-center gap-1">
+                <Link
+                  href="/markets"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
+                    currentPage === "markets"
+                      ? "text-primary bg-primary-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  Markets
+                </Link>
+                <Link
+                  href="/breaking"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
+                    currentPage === "breaking"
+                      ? "text-primary bg-primary-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  Breaking
+                </Link>
+                <Link
+                  href="/trending"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
+                    currentPage === "trending"
+                      ? "text-primary bg-primary-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  Trending
+                </Link>
+                <Link
+                  href="/leaderboard"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
+                    currentPage === "leaderboard"
+                      ? "text-primary bg-primary-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  Leaderboard
+                </Link>
+                <Link
+                  href="/about"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
+                    currentPage === "about"
+                      ? "text-primary bg-primary-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  About
+                </Link>
+              </nav>
+            )}
 
             {/* Auth Buttons & Portfolio Balance */}
             <div className="flex items-center gap-3">
