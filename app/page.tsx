@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
@@ -10,12 +11,22 @@ import MobileNavigation from "@/components/MobileNavigation";
 
 export default function Home() {
   const { login, isLoggedIn, status } = useAuth();
+  const router = useRouter();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+
+  // Redirect authenticated users to markets page
+  useEffect(() => {
+    if (status === "loading") return;
+    
+    if (isLoggedIn) {
+      router.push("/markets");
+    }
+  }, [isLoggedIn, status, router]);
 
   // Show onboarding carousel every time page loads when NOT logged in (client-side only)
   useEffect(() => {
@@ -65,35 +76,6 @@ export default function Home() {
           onSignUp={() => setShowSignUp(true)}
           showPortfolioBalance={true}
         />
-
-        {/* Search Preview Section */}
-        <section className="px-6 lg:px-8 pt-6">
-          <div className="max-w-7xl mx-auto w-full">
-            <div className="max-w-2xl mx-auto">
-              <Link 
-                href="/markets"
-                className="block bg-card border border-card-border rounded-2xl p-3 hover:bg-card-hover hover:border-border-secondary transition group"
-              >
-                <div className="flex gap-2 items-center">
-                  <div className="flex-1 flex items-center gap-3 px-3 py-2 bg-muted rounded-xl">
-                    <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <span className="text-muted-foreground">Search and filter markets...</span>
-                  </div>
-                  <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                    </svg>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground text-center mt-2">
-                  Click to explore markets with advanced filters
-                </p>
-              </Link>
-            </div>
-          </div>
-        </section>
 
         {/* Main Hero */}
         <main className="flex-1 flex flex-col justify-center px-6 lg:px-8 pb-8">
