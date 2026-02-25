@@ -4,20 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 import Navigation from "@/components/Navigation";
 import OnboardingCarousel from "@/components/OnboardingCarousel";
 import ThemeToggle from "@/components/ThemeToggle";
 import MobileNavigation from "@/components/MobileNavigation";
 
 export default function Home() {
-  const { login, isLoggedIn, status } = useAuth();
+  const { isLoggedIn, status } = useAuth();
+  const { openModal } = useAuthModal();
   const router = useRouter();
-  const [showSignIn, setShowSignIn] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
 
   // Redirect authenticated users to markets page
   useEffect(() => {
@@ -44,24 +41,6 @@ export default function Home() {
     setShowOnboarding(false);
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await login(phoneNumber, password);
-      setShowSignIn(false);
-    } catch (error) {
-      alert(error instanceof Error ? error.message : 'Login failed');
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Sign up functionality requires a registration API endpoint
-    // For testing, use existing credentials from database (seeded users)
-    setShowSignUp(false);
-    setShowSignIn(true);
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Onboarding Carousel */}
@@ -72,8 +51,6 @@ export default function Home() {
         {/* Header with New Navigation */}
         <Navigation 
           currentPage="home" 
-          onSignIn={() => setShowSignIn(true)}
-          onSignUp={() => setShowSignUp(true)}
           showPortfolioBalance={true}
         />
 
@@ -112,7 +89,7 @@ export default function Home() {
                   {!isLoggedIn ? (
                     // Show only "Get Started Free" for non-logged-in users
                     <button
-                      onClick={() => setShowSignUp(true)}
+                      onClick={() => openModal("signup")}
                       className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-hover to-primary hover:from-primary hover:to-primary-light rounded-2xl font-semibold text-lg text-primary-foreground transition shadow-lg shadow-primary/20 active:scale-[0.98]"
                     >
                       Get Started Free
@@ -121,7 +98,7 @@ export default function Home() {
                     // Show all buttons for logged-in users
                     <>
                       <button
-                        onClick={() => setShowSignUp(true)}
+                        onClick={() => openModal("signup")}
                         className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary-hover to-primary hover:from-primary hover:to-primary-light rounded-2xl font-semibold text-lg text-primary-foreground transition shadow-lg shadow-primary/20 active:scale-[0.98]"
                       >
                         Get Started Free
@@ -324,205 +301,8 @@ export default function Home() {
         </footer>
       </div>
 
-      {/* Sign In Modal */}
-      {showSignIn && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end sm:items-center justify-center">
-          <div className="w-full max-w-md bg-card rounded-t-3xl sm:rounded-3xl p-6 animate-slide-up border border-card-border">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold">Welcome Back</h2>
-              <button
-                onClick={() => setShowSignIn(false)}
-                className="p-2 text-muted-foreground hover:text-foreground transition"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <form className="space-y-4" onSubmit={handleSignIn}>
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-2">
-                  Phone Number
-                </label>
-                <div className="flex">
-                  <span className="px-4 py-3 bg-muted border border-r-0 border-input-border rounded-l-xl text-muted-foreground">
-                    +254
-                  </span>
-                  <input
-                    type="tel"
-                    placeholder="712 345 678"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="flex-1 px-4 py-3 bg-input border border-input-border rounded-r-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 bg-primary hover:bg-primary-hover rounded-xl font-semibold text-primary-foreground transition active:scale-[0.98]"
-              >
-                Sign In
-              </button>
-
-              <button
-                type="button"
-                className="w-full py-3 text-muted-foreground hover:text-foreground text-sm transition"
-              >
-                Forgot Password?
-              </button>
-            </form>
-
-            <div className="mt-6 pt-6 border-t border-border text-center">
-              <p className="text-muted-foreground text-sm">
-                Don&apos;t have an account?{" "}
-                <button
-                  onClick={() => {
-                    setShowSignIn(false);
-                    setShowSignUp(true);
-                  }}
-                  className="text-primary font-medium hover:text-primary-light transition"
-                >
-                  Sign Up
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Sign Up Modal */}
-      {showSignUp && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end sm:items-center justify-center">
-          <div className="w-full max-w-md bg-card rounded-t-3xl sm:rounded-3xl p-6 animate-slide-up border border-card-border">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold">Create Account</h2>
-              <button
-                onClick={() => setShowSignUp(false)}
-                className="p-2 text-muted-foreground hover:text-foreground transition"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <form className="space-y-4" onSubmit={handleSignUp}>
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-2">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="John Kamau"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-2">
-                  Phone Number
-                </label>
-                <div className="flex">
-                  <span className="px-4 py-3 bg-muted border border-r-0 border-input-border rounded-l-xl text-muted-foreground">
-                    +254
-                  </span>
-                  <input
-                    type="tel"
-                    placeholder="712 345 678"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="flex-1 px-4 py-3 bg-input border border-input-border rounded-r-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground-secondary mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Create a strong password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-input border border-input-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-input-focus focus:ring-1 focus:ring-ring transition"
-                />
-              </div>
-
-              <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  className="mt-1 w-4 h-4 accent-primary rounded"
-                />
-                <label htmlFor="terms" className="text-xs text-muted-foreground">
-                  I agree to the{" "}
-                  <a href="#" className="text-primary hover:text-primary-light transition">Terms of Service</a> and{" "}
-                  <a href="#" className="text-primary hover:text-primary-light transition">Privacy Policy</a>. I am at least 18 years old.
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 bg-primary hover:bg-primary-hover rounded-xl font-semibold text-primary-foreground transition active:scale-[0.98]"
-              >
-                Create Account
-              </button>
-            </form>
-
-            <div className="mt-6 pt-6 border-t border-border text-center">
-              <p className="text-muted-foreground text-sm">
-                Already have an account?{" "}
-                <button
-                  onClick={() => {
-                    setShowSignUp(false);
-                    setShowSignIn(true);
-                  }}
-                  className="text-primary font-medium hover:text-primary-light transition"
-                >
-                  Sign In
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Mobile Navigation */}
       <MobileNavigation currentPage="home" />
-
-      <style jsx>{`
-        @keyframes slide-up {
-          from {
-            transform: translateY(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-        .animate-slide-up {
-          animation: slide-up 0.3s ease-out;
-        }
-      `}</style>
     </div>
   );
 }

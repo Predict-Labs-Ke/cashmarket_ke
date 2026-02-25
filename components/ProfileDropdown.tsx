@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 interface ProfileDropdownProps {
   onSignIn?: () => void;
@@ -16,6 +17,7 @@ export default function ProfileDropdown({
   onSignUp
 }: ProfileDropdownProps) {
   const { isLoggedIn, user, logout } = useAuth();
+  const { openModal } = useAuthModal();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
@@ -292,7 +294,7 @@ export default function ProfileDropdown({
                   <button
                     onClick={() => {
                       setIsOpen(false);
-                      onSignIn?.();
+                      (onSignIn ?? (() => openModal("login")))();
                     }}
                     className="w-full px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition font-medium text-sm"
                   >
@@ -301,7 +303,7 @@ export default function ProfileDropdown({
                   <button
                     onClick={() => {
                       setIsOpen(false);
-                      onSignUp?.();
+                      (onSignUp ?? (() => openModal("signup")))();
                     }}
                     className="w-full px-4 py-2.5 bg-muted text-foreground rounded-lg hover:bg-card-hover transition font-medium text-sm border border-border"
                   >
