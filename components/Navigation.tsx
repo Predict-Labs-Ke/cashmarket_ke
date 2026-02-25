@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 import ProfileDropdown from "./ProfileDropdown";
 
 interface NavigationProps {
@@ -22,6 +23,10 @@ export default function Navigation({
   cashDeposit = 500,
 }: NavigationProps) {
   const { isLoggedIn } = useAuth();
+  const { openModal } = useAuthModal();
+
+  const handleSignIn = onSignIn ?? (() => openModal("login"));
+  const handleSignUp = onSignUp ?? (() => openModal("signup"));
 
   return (
     <>
@@ -120,13 +125,13 @@ export default function Navigation({
               {!isLoggedIn && (
                 <div className="hidden md:flex items-center gap-2">
                   <button
-                    onClick={onSignIn}
+                    onClick={handleSignIn}
                     className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition rounded-lg hover:bg-muted"
                   >
                     Login
                   </button>
                   <button
-                    onClick={onSignUp}
+                    onClick={handleSignUp}
                     className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition"
                   >
                     Sign Up
@@ -136,8 +141,8 @@ export default function Navigation({
               
               {/* Profile Dropdown - Always shown */}
               <ProfileDropdown 
-                onSignIn={onSignIn}
-                onSignUp={onSignUp}
+                onSignIn={handleSignIn}
+                onSignUp={handleSignUp}
               />
             </div>
           </div>
