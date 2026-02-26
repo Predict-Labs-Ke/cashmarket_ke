@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthModalProvider } from "@/contexts/AuthModalContext";
+import AuthLoginSignUpModal from "@/components/AuthLoginSignUpModal";
 import SimulationBanner from "@/components/SimulationBanner";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
@@ -19,8 +21,11 @@ export default function RootLayout({
       <body className="antialiased">
         <SessionProviderWrapper>
           <AuthProvider>
-         
-            {children}
+            <AuthModalProvider>
+              <SimulationBanner />
+              {children}
+              <AuthLoginSignUpModal />
+            </AuthModalProvider>
           </AuthProvider>
         </SessionProviderWrapper>
       </body>
