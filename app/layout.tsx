@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className="antialiased">
         <SessionProviderWrapper>
           <AuthProvider>
-            <SimulationBanner />
+         
             {children}
           </AuthProvider>
         </SessionProviderWrapper>
