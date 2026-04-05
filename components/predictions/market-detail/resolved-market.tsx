@@ -1,7 +1,5 @@
 "use client";
 
-import { CheckCircle2, Trophy, TrendingUp, TrendingDown } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { MarketDetail } from "@/components/predictions/types";
 
 interface ResolvedMarketProps {
@@ -10,112 +8,118 @@ interface ResolvedMarketProps {
 
 export function ResolvedMarket({ market }: ResolvedMarketProps) {
   return (
-    <div className="px-4 space-y-4 w-full">
+    <div className="px-4 space-y-4">
       {/* Winner Highlight */}
-      <Card className="bg-gradient-to-r from-success/20 to-success/5 border-success/30">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <CheckCircle2 className="w-5 h-5 text-success" />
-            <span className="text-sm font-medium text-success">Market Resolved</span>
-          </div>
-          <p className="text-sm text-muted-foreground mb-1">
-            Winning outcome
-          </p>
-          <div className="flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-warning" />
-            <p className="text-xl font-bold text-foreground">
-              {market.resolvedOutcome}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="bg-gradient-to-r from-green-500/20 to-green-500/10 rounded-lg p-4 border border-green-500/30">
+        <div className="flex items-center gap-2 mb-2">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="text-green-500"
+          >
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+          </svg>
+          <span className="text-sm font-medium text-green-400">Resolved</span>
+        </div>
+        <p className="text-[15px] font-semibold text-white mb-1">
+          Winning outcome
+        </p>
+        <p className="text-[18px] font-bold text-green-400">
+          {market.resolvedOutcome}
+        </p>
+      </div>
 
       {/* User's Result */}
       {market.userBet && (
-        <Card className={market.userBet.won 
-          ? "bg-success/10 border-success/30" 
-          : "bg-destructive/10 border-destructive/30"
-        }>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Your Result
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="flex items-baseline gap-2 mb-4">
-              {market.userBet.won ? (
-                <TrendingUp className="w-6 h-6 text-success" />
-              ) : (
-                <TrendingDown className="w-6 h-6 text-destructive" />
+        <div
+          className={`rounded-lg p-4 border ${
+            market.userBet.won
+              ? "bg-green-500/10 border-green-500/30"
+              : "bg-red-500/10 border-red-500/30"
+          }`}
+        >
+          <p className="text-[13px] text-zinc-400 mb-1">Your result</p>
+          <div className="flex items-baseline gap-2 mb-3">
+            <span
+              className={`text-[24px] font-bold ${
+                market.userBet.won ? "text-green-400" : "text-red-400"
+              }`}
+            >
+              {market.userBet.won ? "+" : "-"}$
+              {Math.abs(market.userBet.payout! - market.userBet.amount).toFixed(
+                2
               )}
-              <span className={`text-3xl font-bold ${
-                market.userBet.won ? "text-success" : "text-destructive"
-              }`}>
-                {market.userBet.won ? "+" : "-"}KES{" "}
-                {Math.abs(market.userBet.payout! - market.userBet.amount).toFixed(2)}
-              </span>
-              <span className={`text-sm font-medium px-2 py-0.5 rounded-full ${
-                market.userBet.won 
-                  ? "bg-success/20 text-success" 
-                  : "bg-destructive/20 text-destructive"
-              }`}>
-                {market.userBet.won ? "Won" : "Lost"}
-              </span>
+            </span>
+            <span
+              className={`text-[12px] font-medium ${
+                market.userBet.won ? "text-green-400" : "text-red-400"
+              }`}
+            >
+              {market.userBet.won ? "Won" : "Lost"}
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-3 text-[12px]">
+            <div>
+              <p className="text-zinc-500">Your bet</p>
+              <p className="text-white font-semibold">
+                ${market.userBet.amount.toFixed(2)}
+              </p>
             </div>
-            <div className="grid grid-cols-2 gap-4 p-3 bg-muted rounded-lg">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Your bet</p>
-                <p className="text-base font-semibold text-foreground">
-                  KES {market.userBet.amount.toFixed(2)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">You received</p>
-                <p className="text-base font-semibold text-foreground">
-                  KES {market.userBet.payout!.toFixed(2)}
-                </p>
-              </div>
+            <div>
+              <p className="text-zinc-500">You received</p>
+              <p className="text-white font-semibold">
+                ${market.userBet.payout!.toFixed(2)}
+              </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Resolved Outcomes */}
       {market.resolvedOutcomes && market.resolvedOutcomes.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Final Results</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {market.outcomes.map((outcome, idx) => {
-              const isWinner = outcome.label === market.resolvedOutcome;
-              return (
-                <div 
-                  key={idx} 
-                  className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
-                    isWinner ? "bg-success/10" : "bg-muted"
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    {isWinner && (
-                      <CheckCircle2 className="w-4 h-4 text-success" />
-                    )}
-                    <span className={`text-sm ${
-                      isWinner ? "text-foreground font-semibold" : "text-muted-foreground"
-                    }`}>
-                      {outcome.label}
-                    </span>
-                  </div>
-                  <span className={`text-sm font-semibold ${
-                    isWinner ? "text-success" : "text-muted-foreground"
-                  }`}>
-                    {outcome.percentage}%
+        <div className="bg-zinc-800/30 rounded-lg p-4 space-y-2">
+          <p className="text-[13px] font-semibold text-white mb-3">
+            Final odds
+          </p>
+          {market.outcomes.map((outcome, idx) => {
+            const isWinner = outcome.label === market.resolvedOutcome;
+            return (
+              <div key={idx} className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {isWinner && (
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="text-green-400"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                    </svg>
+                  )}
+                  <span
+                    className={`text-[13px] ${
+                      isWinner ? "text-white font-semibold" : "text-zinc-400"
+                    }`}
+                  >
+                    {outcome.label}
                   </span>
                 </div>
-              );
-            })}
-          </CardContent>
-        </Card>
+                <span
+                  className={`text-[13px] font-semibold ${
+                    outcome.color === "green"
+                      ? "text-green-400"
+                      : "text-red-400"
+                  }`}
+                >
+                  {outcome.percentage}%
+                </span>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

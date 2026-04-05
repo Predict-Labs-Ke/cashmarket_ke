@@ -1,130 +1,136 @@
 "use client";
 
+import { useMemo, useState } from "react";
+import type { ChartPoint, PredictionOutcome } from "../types";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import {
+  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart";
-import type { ChartPoint } from "../types";
 
 interface ChartProps {
   data: ChartPoint[];
   colors: string[];
-  outcomeLabels?: string[];
+  outcomes: PredictionOutcome[];
 }
 
-export function PredictionChart({ data, colors, outcomeLabels = [] }: ChartProps) {
-  // Transform data for recharts format
-  const chartData = data.map((point) => {
-    const transformed: Record<string, string | number> = { time: point.time };
-    point.values.forEach((value, idx) => {
-      transformed[`outcome${idx}`] = value;
-    });
-    return transformed;
-  });
+export function PredictionChart({ data, colors, outcomes }: ChartProps) {
+  const [hiddenLines, setHiddenLines] = useState<Record<string, boolean>>({});
 
-  // Build chart config dynamically based on number of outcomes
-  const chartConfig: ChartConfig = {};
-  const numOutcomes = data[0]?.values.length || 0;
+  // Map the raw data array [93, 7, 0.5] into object keys defined by the outcomes
+  const chartData = useMemo(() => {
+    return data.map((d) => {
+      const obj: any = { time: d.time };
+      d.values.forEach((v: number, idx: number) => {
+        if (outcomes[idx]) obj[outcomes[idx].label] = v;
+      });
+      return obj;
+    });
+  }, [data, outcomes]);
+
+  // Generate chart config dynamically from outcomes
+  const chartConfig = useMemo(() => {
+    const config: ChartConfig = {};
+    outcomes.forEach((outcome, idx) => {
+      config[outcome.label] = {
+        label: outcome.label,
+        color: colors[idx % colors.length],
+      };
+    });
+    return config;
+  }, [outcomes, colors]);
+
   
-  for (let i = 0; i < numOutcomes; i++) {
-    chartConfig[`outcome${i}`] = {
-      label: outcomeLabels[i] || `Outcome ${i + 1}`,
-      color: colors[i] || `hsl(${i * 120}, 70%, 50%)`,
-    };
-  }
 
   return (
-    <div className="px-4 py-6 space-y-4 w-full">
-      {/* Legend */}
-      <div className="flex gap-4 flex-wrap justify-center">
-        {colors.slice(0, numOutcomes).map((color, idx) => (
-          <div key={idx} className="flex items-center gap-2">
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: color }}
-            />
-            <span className="text-sm text-muted-foreground">
-              {outcomeLabels[idx] || `Outcome ${idx + 1}`}:{" "}
-              <span className="font-medium text-foreground">
-                {data[data.length - 1]?.values[idx]?.toFixed(1)}%
-              </span>
-            </span>
-          </div>
-        ))}
+    <div className="w-full flex flex-col gap-6 pt-4">
+      {/* Top Chart Header / Simplistic Legend for active views */}
+      <div className="px-4">
+        {outcomes.map(
+          (outcome, idx) =>
+            !hiddenLines[outcome.label] && (
+              <div key={idx} className="flex items-center gap-2 mb-1">
+                <div
+                  className="w-2 h-2 rounded-2xl"
+                  style={{ backgroundColor: colors[idx % colors.length] }}
+                />
+                <p className="text-foreground/90 text-sm">
+                  {outcome.label}
+                 
+                </p>
+                 <p className="font-semibold text-foreground ml-1 text-sm">
+                    {data[data.length - 1]?.values[idx]?.toFixed(1)}%
+                  </p>
+              </div>
+            )
+        )}
       </div>
 
-      {/* Chart */}
-      <ChartContainer config={chartConfig} className="h-64 w-full">
-        <LineChart
-          accessibilityLayer
-          data={chartData}
-          margin={{
-            left: 0,
-            right: 12,
-            top: 12,
-            bottom: 12,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-border/50" />
-          <XAxis
-            dataKey="time"
-            tickLine={false}
-            axisLine={false}
-            tickMargin={8}
-            className="text-xs"
-            tick={{ fill: "var(--muted-foreground)" }}
-          />
-          <YAxis
-            tickLine={false}
-            axisLine={false}
-            tickMargin={8}
-            domain={[0, 100]}
-            tickFormatter={(value) => `${value}%`}
-            className="text-xs"
-            tick={{ fill: "var(--muted-foreground)" }}
-            width={45}
-          />
-          <ChartTooltip
-            cursor={{ stroke: "var(--border)", strokeDasharray: "4 4" }}
-            content={
-              <ChartTooltipContent
-                formatter={(value, name) => {
-                  const idx = parseInt(String(name).replace("outcome", ""));
-                  return (
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: colors[idx] }}
-                      />
-                      <span>{outcomeLabels[idx] || `Outcome ${idx + 1}`}</span>
-                      <span className="font-medium ml-auto">{Number(value).toFixed(1)}%</span>
-                    </div>
-                  );
-                }}
-              />
-            }
-          />
-          {Array.from({ length: numOutcomes }).map((_, idx) => (
-            <Line
-              key={idx}
-              dataKey={`outcome${idx}`}
-              type="monotone"
-              stroke={colors[idx]}
-              strokeWidth={2.5}
-              dot={false}
-              activeDot={{
-                r: 5,
-                fill: colors[idx],
-                stroke: "var(--background)",
-                strokeWidth: 2,
-              }}
+      {/* Main Chart Area */}
+      <div className="h-[250px] w-full px-4">
+        <ChartContainer config={chartConfig} className="h-full w-full">
+          <LineChart
+            accessibilityLayer
+            data={chartData}
+            margin={{ left: 12, right: 12, top: 12, bottom: 12 }}
+          >
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#333" />
+            <XAxis
+              dataKey="time"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tick={{ fill: "#666", fontSize: 12 }}
             />
-          ))}
-        </LineChart>
-      </ChartContainer>
+            {/* YAxis on right to mimic Polymarket style percentages */}
+            <YAxis
+              orientation="right"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tick={{ fill: "#666", fontSize: 12 }}
+              domain={[0, 100]}
+              tickFormatter={(val) => `${val}%`}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  className="bg-card! border-border/50! text-foreground! rounded-xl! p-2!"
+                  hideLabel
+                  hideIndicator
+
+                  
+                />
+
+              
+
+              }
+            />
+            {outcomes.map((outcome, idx) => (
+              <Line
+                key={outcome.label}
+                type="monotone" // Use monotone curve as requested
+                dataKey={outcome.label}
+                strokeWidth={2}
+
+                dot={false}
+                hide={hiddenLines[outcome.label]}
+                style={{ stroke: colors[idx % colors.length] }} // Overrides class stroke
+                        
+
+
+
+              />
+            ))}
+          </LineChart>
+        </ChartContainer>
     </div>
+
+      </div>
+
+
   );
 }

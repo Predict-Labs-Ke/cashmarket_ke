@@ -1,39 +1,51 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import type { TimeframeOption } from "../types";
+import {
+  TimeframeOption
+}from "../types"
+
+import { Button } from "@/components/ui/button";
 
 interface OutcomeTabsProps {
   activeTab: "outcomes" | "about";
   id: string;
-  timeframe: TimeframeOption['value'] | undefined | string;
+  timeframe:TimeframeOption['value'] | undefined|string;
+  
 }
 
-export function OutcomeTabs({ activeTab, id, timeframe }: OutcomeTabsProps) {
-  const tabs = [
-    { value: "outcomes", label: "Outcomes" },
-    { value: "about", label: "About" },
-  ] as const;
 
+
+
+export function OutcomeTabs({ activeTab, id,timeframe }: OutcomeTabsProps) {
+
+
+    
   return (
-    <div className="flex w-full border-b border-border">
-      {tabs.map((tab) => (
-        <Link
-          key={tab.value}
-          href={`/markets/${id}?category=${tab.value}${timeframe ? `&timeframe=${timeframe}` : ''}`}
-          replace
-          className={cn(
-            "flex-1 py-3 text-center text-sm font-medium transition-colors relative",
-            activeTab === tab.value
-              ? "text-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          {tab.label}
-          {activeTab === tab.value && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
-          )}
-        </Link>
-      ))}
+    <div className="flex gap-6 px-4 ">
+      <Link href={`/markets/${id}?tab=outcomes&timeframe=${timeframe}`} replace>
+      <Button className={`py-3 px-4 text-[15px] bg-transparent!  font-medium border-none! rounded-3xl capitalize  transition-colors ${
+          activeTab === "outcomes"
+            ? " text-background/90! bg-foreground!"
+            : "text-muted-foreground!"
+        }`}
+        variant={activeTab === "outcomes" ? "default" : "secondary"}
+        size={"sm"}
+      >
+        <span>Outcomes</span>
+      </Button>
+      </Link>
+      <Link href={`/markets/${id}?tab=about&timeframe=${timeframe}`} replace>
+      <Button className={`py-3 px-4 text-[15px] bg-transparent!  font-medium border-none! rounded-3xl capitalize  transition-colors ${
+          activeTab === "about"
+            ? " text-background/90! bg-foreground!"
+            : "text-muted-foreground!"
+        }`}
+        variant={activeTab === "about" ? "default" : "secondary"}
+        size={"sm"}
+      >
+      <span>About</span>
+      </Button>
+      
+      </Link>
     </div>
   );
 }

@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import type { Market } from "./types";
+import type { Market, PredictionOutcome } from "@/components/predictions/types";
+import type { MouseEvent } from "react";
 import Image from "next/image";
+
+import { Button } from "@/components/ui/button";
+import { Check, ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface MarketCardProps {
   market: Market;
@@ -10,77 +15,92 @@ interface MarketCardProps {
 
 export function MarketCard({ market }: MarketCardProps) {
   const isResolved = market.status === "resolved";
+  const router = useRouter();
 
   return (
     <Link href={`/predictions/${market.id}`}>
-      <div className="px-4 py-4 transition-colors border-b border-zinc-800/30 bg-card/40 rounded-2xl hover:bg-card/60 active:scale-[0.98] transform-gpu cursor-pointer">
+      <div className="px-4 py-4 transition-colors bg-card rounded-2xl  cursor-pointer flex flex-col gap-3">
      
-        <div className="flex gap-3">
-          {/* Image */}
-          <div className="relative h-30 w-30 shrink-0">
+    
+        <div className="flex flex-row gap-3 items-center">
+            {/* Image */}
+          <div className="relative h-12 w-12 shrink-0">
             <Image
               src={market.image || "/placeholder.svg"}
               alt={market.title}
-              fill
+             fill
               className=" rounded-lg object-cover flex-shrink-0 "
+              priority
             />
             {isResolved && (
-              <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="text-black"
-                >
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                </svg>
-              </div>
+           <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
+            <Check
+            className="text-white"
+            size={12}
+            />
+            </div>
             )}
+
+            
+          </div>
+           <p className="text-foreground font-bold line-clamp-2 hover:underline underline-offset-4 tap:underline active:underline">
+              {market.title}
+            </p>
           </div>
 
-          {/* Content */}
+          {/* Content */} 
           <div className="flex-1 min-w-0">
-            <h3 className="text-[15px] font-semibold text-white mb-3 line-clamp-2">
-              {market.title}
-            </h3>
+           
 
             {/* Outcomes */}
-            <div className="space-y-2">
-              {market.outcomes.map((outcome, idx) => (
-                <div key={idx} className="flex items-center justify-between">
-                  <span className="text-[13px] text-zinc-400">
+            <div className="space-y-2.5">
+              {market.outcomes.slice(0, 2).map((outcome: PredictionOutcome, idx: number) => (
+                <div key={idx} className="flex items-center justify-between gap-3">
+                  <p className="text-foreground/80 truncate flex-1 min-w-0 text-sm">
                     {outcome.label}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`text-[13px] font-semibold ${
-                        outcome.color === "green"
-                          ? "text-[#2DC96F]"
-                          : "text-[#F23F7F]"
-                      }`}
-                    >
+                  </p>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <p className="text-foreground/60 text-sm tabular-nums w-10 text-right">
                       {outcome.percentage}%
-                    </span>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      disabled={isResolved}
-                      className={`px-3 py-1 rounded-full text-[12px] font-semibold active:scale-95 transition-transform ${
-                        isResolved
-                          ? "bg-zinc-700/30 text-zinc-500 cursor-not-allowed"
-                          : outcome.color === "green"
-                          ? "bg-[#2DC96F]/20 text-[#2DC96F]"
-                          : "bg-[#F23F7F]/20 text-[#F23F7F]"
-                      }`}
-                    >
-                      {outcome.color === "green" ? "Yes" : "No"}
-                    </button>
+                    </p>
+                    <div className="flex gap-1.5">
+                      <Button
+                        onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          router.push(`/predictions/${market.id}?bet=yes&outcome=${idx}`);
+                        }}
+                        disabled={isResolved}
+                        className="px-4! py-1.5! h-8! min-w-[52px]! rounded-lg! text-[13px]! font-semibold! active:scale-95 transition-transform bg-success/10! text-success! hover:bg-success/20!"
+                        size="sm"
+                      >
+                        Yes
+                      </Button>
+                      <Button
+                        onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          router.push(`/predictions/${market.id}?bet=no&outcome=${idx}`);
+                        }}
+                        disabled={isResolved}
+                        className="px-4! py-1.5! h-8! min-w-[52px]! rounded-lg! text-[13px]! font-semibold! active:scale-95 transition-transform bg-destructive/10! text-destructive! hover:bg-destructive/20!"
+                        size="sm"
+                      >
+                        No
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
+
+              {market.outcomes.length > 2 && (
+                <div className="flex items-center justify-center gap-1 pt-1 cursor-pointer">
+                  <p className="text-muted-foreground text-xs">
+                    +{market.outcomes.length - 2} more
+                  </p>
+                  <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+                </div>
+              )}
             </div>
 
             <p className="text-[12px] text-zinc-600 mt-2">
@@ -88,7 +108,7 @@ export function MarketCard({ market }: MarketCardProps) {
             </p>
           </div>
         </div>
-      </div>
+      
     </Link>
   );
 }

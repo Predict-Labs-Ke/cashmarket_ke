@@ -1,40 +1,54 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import type { TimeframeOption } from "../types";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface TimeframeSelectorProps {
   options: TimeframeOption[];
   marketId: string;
-  activeTimeframe: TimeframeOption['value'];
+  activeTimeframe:TimeframeOption['value'];
+  activeTab:string;
 }
 
 export function TimeframeSelector({
   options,
   marketId,
   activeTimeframe,
+  activeTab,
 }: TimeframeSelectorProps) {
+
+
   return (
-    <div className="flex gap-1.5 px-4 py-2 overflow-x-auto scrollbar-hide w-full justify-center">
+    <div className="flex gap-2  w-full justify-center overflow-x-auto scrollbar-hide  
+    px-4
+    ">
       {options.map((option) => (
-        <Button
-          key={option.value}
-          variant={activeTimeframe === option.value ? "default" : "ghost"}
-          size="sm"
-          asChild
-          className={activeTimeframe === option.value 
-            ? "bg-primary text-primary-foreground" 
-            : "text-muted-foreground hover:text-foreground"
-          }
+      
+         <Button
+         variant={activeTimeframe === option.value ? "default" : "secondary"}
+         size="sm"
+         className= {
+          cn(
+            "rounded-xl border-none! cursor-pointer font-medium whitespace-nowrap transition-colors p-2",
+            activeTimeframe === option.value ? "bg-muted! text-foreground!" : "bg-background! text-muted-foreground!"
+          )
+      
+         }
+         key={option.value}
+         
+         >
+            <Link
+        
+          href={`/markets/${marketId}?timeframe=${option.value}&tab=${activeTab}`}
+          replace 
+          
+          
         >
-          <Link
-            href={`/markets/${marketId}?timeframe=${option.value}`}
-            replace
-          >
-            {option.label}
-          </Link>
-        </Button>
+           {option.label}
+        </Link>
+         </Button>
       ))}
     </div>
   );

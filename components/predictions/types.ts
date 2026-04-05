@@ -7,6 +7,7 @@ export interface PredictionOutcome {
   percentage: number
   odds: string
   color: "green" | "red"
+  id: number
 }
 
 export interface Market {
@@ -15,10 +16,14 @@ export interface Market {
   image: string
   category: PredictionCategory
   outcomes: PredictionOutcome[]
+  endDate: string
+  startDate: string
   totalVolume: string
   timeframe?: "Daily" | "Monthly" | "Yearly"
   status: MarketStatus
   resolvedOutcome?: string
+  description: string
+
 }
 
 export interface MarketDetail extends Market {

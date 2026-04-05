@@ -1,7 +1,8 @@
-"use client";
 
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Share2 } from "lucide-react";
+
+import Link from "next/link";
+import {ArrowLeft, Share2} from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 interface DetailHeaderProps {
@@ -11,54 +12,55 @@ interface DetailHeaderProps {
 }
 
 export function DetailHeader({ title, image, onShare }: DetailHeaderProps) {
-  const router = useRouter();
-  
-  const handleShare = async () => {
-    if (onShare) {
-      onShare();
-    } else if (navigator.share) {
-      try {
-        await navigator.share({
-          title: title,
-          url: window.location.href,
-        });
-      } catch (err) {
-        // User cancelled or share failed
-      }
-    }
-  };
-
+ ;
   return (
-    <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm px-4 py-3">
-      <div className="flex items-center justify-between mb-3">
+  
+      <div className="flex flex-row items-center  gap-2.5 w-full px-1">
+     <Link href="/markets">
         <Button
-          variant="ghost"
+          className="text-foreground! active:scale-95 transition-transform p-1! bg-transparent!"
+           
+            
+          
           size="icon"
-          onClick={() => router.back()}
-          className="text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="w-5 h-5" />
+         <ArrowLeft 
+         className="text-foreground w-auto h-auto"
+         />
         </Button>
-        <Button
-          variant="ghost"
+     </Link>
+        <div className="flex items-center gap-3 w-full ">
+
+
+         
+
+
+       <div className="relative w-12 h-12">
+         <Image
+          src={image || "/placeholder.svg"}
+          alt={title}
+       fill
+          className="rounded-lg object-cover flex-shrink-0"
+        />
+       </div>
+        <p className="text-base font-semibold text-foreground line-clamp-2">
+          {title}
+        </p>
+      </div>
+     <div>
+         <Button
+          onClick={onShare}
+          className="text-foreground! active:scale-95 transition-transform p-1! bg-transparent!"
           size="icon"
-          onClick={handleShare}
-          className="text-muted-foreground hover:text-foreground"
         >
-          <Share2 className="w-5 h-5" />
+         <Share2
+         className="text-foreground w-6 h-6"
+         />
         </Button>
+     </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <img
-          src={image || "/placeholder.svg"}
-          alt=""
-          className="w-12 h-12 rounded-xl object-cover border border-border"
-        />
-        <h1 className="text-lg font-semibold text-foreground line-clamp-2">
-          {title}
-        </h1>
-      </div>
-    </div>
+      
+  
   );
 }
