@@ -13,15 +13,15 @@ interface OutcomeCardProps {
 
 export function OutcomeCard({ outcome, volume, image, onVote }: OutcomeCardProps) {
   return (
-    <div className="p-3 bg-card/80 rounded-2xl flex flex-col gap-5">
+    <div className="p-3.5 md:p-4 bg-card/80 rounded-2xl flex flex-col gap-4 md:gap-5">
       {/* Top Row: Icon + Info + Main Percentage */}
       <div className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl relative overflow-hidden">
+          <div className="w-11 h-11 md:w-12 md:h-12 rounded-xl relative overflow-hidden shrink-0">
             <Image src={image} alt={outcome.label} fill className="object-cover" />
           </div>
           <div className="flex flex-col">
-            <p className="text-foreground font-semibold text-sm">
+            <p className="text-foreground font-semibold text-sm md:text-[15px]">
               {outcome.label}
             </p>
             <p className="text-foreground/50 mt-0.5 text-[13px]">
@@ -38,14 +38,14 @@ export function OutcomeCard({ outcome, volume, image, onVote }: OutcomeCardProps
       <div className="flex gap-2">
         <Button
           onClick={() => onVote("yes")}
-          className="flex-1 py-1 rounded-xl text-[14px] font-bold active:scale-95 transition-transform bg-success/10! text-success! hover:bg-success/20!"
+          className="flex-1 min-h-10 py-2 rounded-xl text-[14px] font-bold active:scale-95 transition-transform bg-success/10! text-success! hover:bg-success/20!"
           size="sm"
         >
           Yes • {outcome.odds}
         </Button>
         <Button
           onClick={() => onVote("no")}
-          className="flex-1 py-1 rounded-xl text-[14px] font-bold active:scale-95 transition-transform bg-destructive/10! text-destructive! hover:bg-destructive/20!"
+          className="flex-1 min-h-10 py-2 rounded-xl text-[14px] font-bold active:scale-95 transition-transform bg-destructive/10! text-destructive! hover:bg-destructive/20!"
           size="sm"
         >
           No • {Math.max(0.1, 100 - parseFloat(outcome.odds.replace('¢',''))).toFixed(1)}¢

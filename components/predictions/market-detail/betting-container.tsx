@@ -23,7 +23,7 @@ export function BettingContainer({
 
   return (
     <>
-      <div className="p-4 pt-6 space-y-4 w-full border-t border-border/50!">
+      <div className="p-3 md:p-4 pt-4 md:pt-6 space-y-3 md:space-y-4 w-full border-t border-border/50!">
         {market.outcomes.map((outcome: PredictionOutcome, idx: number) => (
           <OutcomeCard
             key={idx}

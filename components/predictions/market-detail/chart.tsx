@@ -45,13 +45,13 @@ export function PredictionChart({ data, colors, outcomes }: ChartProps) {
   
 
   return (
-    <div className="w-full flex flex-col gap-6 pt-4">
+    <div className="w-full flex flex-col gap-3 md:gap-6 pt-3 md:pt-5">
       {/* Top Chart Header / Simplistic Legend for active views */}
-      <div className="px-4">
+      <div className="px-3 md:px-6 flex flex-wrap items-center gap-x-4 gap-y-1.5">
         {outcomes.map(
           (outcome, idx) =>
             !hiddenLines[outcome.label] && (
-              <div key={idx} className="flex items-center gap-2 mb-1">
+              <div key={idx} className="flex items-center gap-2">
                 <div
                   className="w-2 h-2 rounded-2xl"
                   style={{ backgroundColor: colors[idx % colors.length] }}
@@ -69,7 +69,7 @@ export function PredictionChart({ data, colors, outcomes }: ChartProps) {
       </div>
 
       {/* Main Chart Area */}
-      <div className="h-[250px] w-full px-4">
+      <div className="h-56 sm:h-64 md:h-80 lg:h-90 w-full px-1.5 sm:px-2 md:px-4 lg:px-6 pb-1.5 md:pb-4">
         <ChartContainer config={chartConfig} className="h-full w-full">
           <LineChart
             accessibilityLayer

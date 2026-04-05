@@ -20,9 +20,9 @@ export function OutcomeTabs({ activeTab, id,timeframe }: OutcomeTabsProps) {
 
     
   return (
-    <div className="flex gap-6 px-4 ">
-      <Link href={`/markets/${id}?tab=outcomes&timeframe=${timeframe}`} replace>
-      <Button className={`py-3 px-4 text-[15px] bg-transparent!  font-medium border-none! rounded-3xl capitalize  transition-colors ${
+    <div className="grid grid-cols-2 gap-2 w-full max-w-sm px-1">
+      <Link href={`/markets/${id}?tab=outcomes&timeframe=${timeframe}`} replace className="w-full">
+      <Button className={`w-full min-h-10 py-2.5 px-3 text-[14px] bg-transparent! font-medium border-none! rounded-2xl capitalize transition-colors ${
           activeTab === "outcomes"
             ? " text-background/90! bg-foreground!"
             : "text-muted-foreground!"
@@ -33,8 +33,8 @@ export function OutcomeTabs({ activeTab, id,timeframe }: OutcomeTabsProps) {
         <span>Outcomes</span>
       </Button>
       </Link>
-      <Link href={`/markets/${id}?tab=about&timeframe=${timeframe}`} replace>
-      <Button className={`py-3 px-4 text-[15px] bg-transparent!  font-medium border-none! rounded-3xl capitalize  transition-colors ${
+      <Link href={`/markets/${id}?tab=about&timeframe=${timeframe}`} replace className="w-full">
+      <Button className={`w-full min-h-10 py-2.5 px-3 text-[14px] bg-transparent! font-medium border-none! rounded-2xl capitalize transition-colors ${
           activeTab === "about"
             ? " text-background/90! bg-foreground!"
             : "text-muted-foreground!"
