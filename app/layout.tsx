@@ -17,12 +17,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+  try {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    document.documentElement.classList.toggle('dark', isDark);
+  } catch {}
+})();`,
+          }}
+        />
+      </head>
       <body className="antialiased">
         <SessionProviderWrapper>
           <AuthProvider>
             <AuthModalProvider>
-              <SimulationBanner />
+              {/* <SimulationBanner /> */}
               {children}
               <AuthLoginSignUpModal />
             </AuthModalProvider>

@@ -20,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     if (status === "loading") return;
     
-    if (isLoggedIn) {
+    if (true) {
       router.push("/markets");
     }
   }, [isLoggedIn, status, router]);
