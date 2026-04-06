@@ -42,7 +42,7 @@ export default function MarketsPage() {
     // Sort resolved markets to the end
     if (a.resolved_outcome && !b.resolved_outcome) return 1;
     if (!a.resolved_outcome && b.resolved_outcome) return -1;
-    
+
     // Sort by total volume
     return b.total_volume - a.total_volume;
   });
@@ -76,10 +76,9 @@ export default function MarketsPage() {
         </div>
 
         {/* Search and Filters - Collapsible Drawer */}
-        <div 
-          className={`mb-6 overflow-hidden transition-all duration-300 ${
-            isFilterOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}
+        <div
+          className={`mb-6 overflow-hidden transition-all duration-300 ${isFilterOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            }`}
         >
           <div className="space-y-4">
             {/* Search Bar */}
@@ -116,11 +115,10 @@ export default function MarketsPage() {
                       category === "All" ? "" : category
                     )
                   }
-                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
-                    selectedCategory === (category === "All" ? "" : category)
+                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${selectedCategory === (category === "All" ? "" : category)
                       ? "bg-primary text-primary-foreground"
                       : "bg-card text-foreground hover:bg-muted"
-                  }`}
+                    }`}
                 >
                   {category}
                 </button>
@@ -131,31 +129,28 @@ export default function MarketsPage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setActiveFilter("all")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  activeFilter === "all"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeFilter === "all"
                     ? "bg-primary text-primary-foreground"
                     : "bg-card text-foreground hover:bg-muted"
-                }`}
+                  }`}
               >
                 All Markets
               </button>
               <button
                 onClick={() => setActiveFilter("active")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  activeFilter === "active"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeFilter === "active"
                     ? "bg-primary text-primary-foreground"
                     : "bg-card text-foreground hover:bg-muted"
-                }`}
+                  }`}
               >
                 Active
               </button>
               <button
                 onClick={() => setActiveFilter("resolved")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  activeFilter === "resolved"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeFilter === "resolved"
                     ? "bg-primary text-primary-foreground"
                     : "bg-card text-foreground hover:bg-muted"
-                }`}
+                  }`}
               >
                 Resolved
               </button>

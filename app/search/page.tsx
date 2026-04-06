@@ -306,7 +306,7 @@ export default function SearchPage() {
       </main>
 
       {/* Mobile Navigation */}
-      <MobileNavigation currentPage="search" />
+      <MobileNavigation />
     </div>
   );
 }
