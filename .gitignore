@@ -47,4 +47,5 @@ next-env.d.ts
 *.db-wal
 # block bun in prod used only in dev
 .bun
-.bun.lock
+/bun.lock
+/bun.lockb
